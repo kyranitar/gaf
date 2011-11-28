@@ -1,0 +1,8 @@
+Temp/
+*.csproj
+*.csproj.user
+*.unityproj
+*.pidb
+*.sln
+*.suo
+*.userprefs
