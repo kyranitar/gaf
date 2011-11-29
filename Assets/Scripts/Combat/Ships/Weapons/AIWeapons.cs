@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class AIWeapons : WeaponSystem {
+public class AIWeapons : ShipWeapons {
 
   /// 1/X chance the Ship will shoot.
   public int ShootChance = 400;

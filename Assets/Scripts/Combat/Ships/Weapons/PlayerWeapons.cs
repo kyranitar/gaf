@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerWeapons : WeaponSystem {
+public class PlayerWeapons : ShipWeapons {
 
   public void Update() {
     if (Input.GetKeyUp(KeyCode.Alpha1)) {

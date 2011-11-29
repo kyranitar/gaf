@@ -3,7 +3,7 @@ using UnityEngine;
 /// A weapon which fires single projectiles at a time.
 ///
 /// Author: Timothy Jones
-public abstract class ProjectileWeapon : Weapon {
+public class ProjectileWeapon : Weapon {
 
   public Transform ProjectilePrefab;
 

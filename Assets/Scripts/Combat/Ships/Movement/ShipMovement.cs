@@ -4,55 +4,82 @@ using System.Collections;
 /// The basic movement for a ship.
 public abstract class ShipMovement : MonoBehaviour {
 
-  /// The speed that the ship will move at.
-  public float Speed = 1;
-
-  /// The maximum speed the ship can turn at.
-  public float MaximumSpeed = 11;
-
-  /// The acceleration of the ship.
-  public float Acceleration = 4;
-
-  /// The rotation speed of the ship.
-  public float RotationSpeed = 60;
-
-  /// Speed the ship up (Thrusters).
-  protected void Accelerate() {
-    Speed += Acceleration * Time.deltaTime;
-
-    if (Speed > MaximumSpeed)
-      Speed = MaximumSpeed;
+  #region Vars
+  public float maxSpeed = 11f;
+  public float acceleration = 4f;
+  public float turnSpeed = 280;
+  public int maxHealth = 100;
+  
+  protected GameObject playerRef;
+  protected int currHealth = 100;
+  protected float shootTimer = 0;
+  
+  private float currVelocity = 0f;
+  #endregion
+  
+  protected virtual void Start () {
+    
+    currHealth = maxHealth;
+    shootTimer = Time.time;
+    playerRef = GameObject.FindGameObjectWithTag("Player");
   }
-
-  /// Slow the ship down (Brakes).
-  protected void Decelerate() {
-    Speed -= Acceleration / 2 * Time.deltaTime;
-
-    if (Speed < 0) {
-      Speed = 0;
+  
+  protected virtual void Update () {
+    
+  }
+  
+  #region Movement
+  protected void Accelerate() {
+    
+    currVelocity += acceleration * Time.deltaTime;
+    if(currVelocity > maxSpeed) {
+      currVelocity = maxSpeed;
     }
   }
-
-  /// Move the ship forwards.
+  
+  protected void Decelerate() {
+    
+    currVelocity -= acceleration * 0.5f * currVelocity * Time.deltaTime;
+    if(currVelocity < 0) {
+      currVelocity = 0;
+    }
+  }
+  
   protected void Move() {
-    transform.position += transform.forward * Speed * Time.deltaTime;
+    transform.position += transform.forward * currVelocity * Time.deltaTime;
   }
-
-  /// Turn left at maximum turning speed.
-  protected void TurnLeft() {
-    transform.RotateAround(transform.up, -RotationSpeed * Time.deltaTime);
-  }
-
-  /// Turn right at maximum turning speed.
-  protected void TurnRight() {
-    transform.RotateAround(transform.up, RotationSpeed * Time.deltaTime);
-  }
-
-  /// Turn to face the target at maximum turning speed.
+  #endregion
+  
+  #region Turning
+  /* Turn to face the target at maximum turning speed. */
   protected void TurnTowards(Vector3 targetPosition) {
-    Quaternion look = Quaternion.LookRotation(targetPosition - transform.position, transform.up);
-    float rot = RotationSpeed * Time.deltaTime;
-    transform.rotation = Quaternion.RotateTowards(this.transform.rotation, look, rot);
+    
+    float angle = Mathf.Atan2(targetPosition.y, targetPosition.x) * Mathf.Rad2Deg;
+    transform.rotation = Quaternion.Euler(new Vector3(0, -angle + 90, 0));
+    
+    /*transform.rotation = Quaternion.RotateTowards(
+                                                  transform.rotation, 
+                                                  Quaternion.LookRotation(targetPosition - transform.position, transform.up),
+                                                  turnSpeed * Time.deltaTime
+                                                  );*/
   }
-
+  
+  /* Turn to face the mouse at maximum turning speed. */ // <- TODO put in unity methods
+  protected void TurnTowardsMouse() {
+    
+    Vector3 mousePosition = Input.mousePosition;
+    Vector3 objPosition = Camera.main.WorldToScreenPoint(transform.position);
+    mousePosition.x = mousePosition.x - objPosition.x;
+    mousePosition.y = mousePosition.y - objPosition.y;
+    float angle = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
+    transform.rotation = Quaternion.Euler(new Vector3(0, -angle + 90, 0));  
+  }
+  #endregion
+  
+  #region Helpers
+  protected float DistanceFromPlayer() {
+    GameObject player = GameObject.FindGameObjectWithTag("Player"); 
+    return Vector3.Distance(transform.position, player.transform.position);
+  }
+  #endregion
 }

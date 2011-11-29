@@ -4,7 +4,7 @@
 /// Needs to be updated to deal with weapon slots.
 /// 
 /// Author: Timothy Jones
-public abstract class WeaponSystem : MonoBehaviour {
+public abstract class ShipWeapons : MonoBehaviour {
 
   /// The weapons available to this weapon system.
   /// Note that every WeaponSystem MUST have at least one weapon.
