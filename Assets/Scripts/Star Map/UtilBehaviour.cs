@@ -2,12 +2,12 @@ using UnityEngine;
 
 public abstract class UtilBehaviour : MonoBehaviour {
 
-  protected Vector3 ThisZ(Vector3 vector) {
-    return new Vector3(vector.x, vector.y, transform.position.z);
+  protected Vector3 ThisY(Vector3 vector) {
+    return new Vector3(vector.x, transform.position.y, vector.z);
   }
 
-  protected Vector3 IgnoreZ(Vector3 vector) {
-    return new Vector3(vector.x, vector.y, 0);
+  protected Vector3 IgnoreY(Vector3 vector) {
+    return new Vector3(vector.x, 0, vector.z);
   }
 
 }

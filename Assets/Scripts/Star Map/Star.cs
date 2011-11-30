@@ -3,20 +3,17 @@ using System.Collections;
 
 public class Star : UtilBehaviour {
 
+  public GameObject Marker;
+
+  public void Start() {
+    Vector3 pos = this.transform.position;
+    Quaternion rot = this.transform.rotation;
+    Marker = Instantiate(Marker, pos, rot) as GameObject;
+    Marker.transform.parent = this.transform;
+  }
+
   public void OnMouseUpAsButton() {
-    GameObject destination = GameObject.FindGameObjectWithTag("Destination");
-    Destination dScript = destination.GetComponent<Destination>();
-    dScript.TravelTo(gameObject);
-    
-    GameObject player = GameObject.FindGameObjectWithTag("Player");
-    
-    if (ThisZ(player.transform.position) == transform.position) {
-      Application.LoadLevel("Combat");
-      
-    } else if (ThisZ(destination.transform.position) != transform.position) {
-      Player pScript = player.GetComponent<Player>();
-      pScript.Stop();
-    }
+    Marker.GetComponent<Marker>().OnMouseUpAsButton();
   }
   
 }

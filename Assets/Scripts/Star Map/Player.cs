@@ -32,8 +32,9 @@ public class Player : UtilBehaviour {
   public void Start() {
     // Pick a star to start at.
     GameObject start = GameObject.FindGameObjectWithTag("Star");
-    this.transform.position = ThisZ(start.transform.position);
-
+    this.transform.position = ThisY(start.transform.position);
+    start.GetComponent<Star>().Marker.GetComponent<Marker>().IsDestination = true;
+    
     // No initial destination.
     this.destination = transform.position;
   }
@@ -43,7 +44,7 @@ public class Player : UtilBehaviour {
 
     // If a destination is available, move towards it.
     if (destination != position) {
-      Vector3 turn = IgnoreZ(destination);
+      Vector3 turn = IgnoreY(destination);
 
       // Calculate the current and destination rotations.
       // Note that we ignore the z axis to avoid 3D rotation.
@@ -66,7 +67,7 @@ public class Player : UtilBehaviour {
   /// Sets the player's destination. If the player already has a destination,
   /// it will stop where it is and begin moving towards this new destination.
   public void TravelTo(GameObject destination) {
-    this.destination = ThisZ(destination.transform.position);
+    this.destination = ThisY(destination.transform.position);
   }
 
   /// Stops the player's movement.
