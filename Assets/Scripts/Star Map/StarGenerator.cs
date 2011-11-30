@@ -28,30 +28,51 @@ public class StarGenerator : MonoBehaviour {
         x = minX + Random.value * (maxX - minX);
         z = minZ + Random.value * (maxZ - minZ);
         
-        //Check bounds
-        float m1 = (TopRight.x - TopLeft.x) / (TopRight.y - TopLeft.y);
-        float m2 = (BottomRight.x - BottomLeft.x) / (BottomRight.y - BottomLeft.y);
-        
-        float x1 = TopLeft.x + (z - TopLeft.y) * m1;
-        float x2 = BottomLeft.x + (z - BottomLeft.y) * m2;
-        if (x > x1 || x < x2) {
+        //Check top bounds
+        float m = (TopRight.x - TopLeft.x) / (TopRight.y - TopLeft.y);
+        float b = TopLeft.x + (z - TopLeft.y) * m;
+        if (x > b) {
           continue;
         }
 
-        break;
-        
-        m1 = (TopLeft.x - BottomLeft.x) / (TopLeft.y - BottomLeft.y);
-        m2 = (TopRight.x - BottomRight.x) / (TopRight.y - BottomRight.y);
-        
-        float z1 = (x - BottomLeft.x) / m1 + BottomLeft.y;
-        float z2 = (x - BottomRight.x) / m2 + BottomRight.y;
-        if (z < z1 || z > z2) {
+		//Check bottom bounds
+		m = (BottomRight.x - BottomLeft.x) / (BottomRight.y - BottomLeft.y);
+		b = BottomLeft.x + (z - BottomLeft.y) * m;
+		if (x < b) {
+          continue;
+        }
+				
+		//check left bounds
+        m = (TopLeft.x - BottomLeft.x) / (TopLeft.y - BottomLeft.y);
+        b = (x - BottomLeft.x) / m + BottomLeft.y;
+        if (z > b) {
+          continue;
+        }
+		
+        //check right bounds
+		m = (TopRight.x - BottomRight.x) / (TopRight.y - BottomRight.y);
+        b = (x - BottomRight.x) / m + BottomRight.y;
+        if (z < b) {
           continue;
         }
         
-        break;
+        //check bounds with other stars
+        Vector3 testpos = new Vector3(x, 0.01f, z);
+        //This boolean is just here until I can figure out how to get it to break
+        //to a label, since continue just affects the inner loop.
+        bool ok = true;
+        foreach(GameObject star in stars){
+	      if(star != null && Vector3.Distance(testpos,star.transform.position) < 50){
+	        ok = false;	
+	      }
+	    }
+        if(!ok){
+          continue;
+        }
+        
+        //If we get here, everything is ok!
+	    break;
       }
-      
       Vector3 pos = new Vector3(x, 0.01f, z);
       Quaternion rot = new Quaternion(0, 0, 0, 0);
       stars[i] = Instantiate(StarPrefab, pos, rot) as GameObject;
