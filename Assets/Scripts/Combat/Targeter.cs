@@ -4,12 +4,11 @@ using System.Collections;
 public class Targeter : MonoBehaviour {
  
   private Transform owner;
-	// Use this for initialization
-	void Start () {
+
+  void Start () {
 	
   }
 	
-	// Update is called once per frame
 	void Update () {
     
       
