@@ -21,6 +21,7 @@ public class AIMovement : ShipMovement {
   public float chanceAlly = 0.9f;
   public float chanceObjective = 0.9f;
   public float chanceRetreat = 0.95f;
+  public float chanceAnyEnemy = 0.5f;
   
   public float distFront = 1.2f;
   public float distNear = 2.0f;
@@ -29,14 +30,13 @@ public class AIMovement : ShipMovement {
   
   #region Other fields
   private Transform moveTarget;
-  private Transform attackTarget;
+  public GameObject targetery;
   private GameObject searchTarget;
+  private Targeter targeter;
   private Transform objective;
   private Transform home;
-  private int aiTimer;
+  private float aiTimer;
   private bool aiLocked;
-  private bool aiAttack;
-  private bool somethingClose;
   #endregion
   
   public void Start () {
@@ -48,37 +48,30 @@ public class AIMovement : ShipMovement {
     distNear *= range;
     distMin *= range;
     
-    /* Instatiate search target, and unlock AI behaviour. */
-    if(searchTarget == null) searchTarget = new GameObject("searchTarget");
+    targetery  = Instantiate(targetery, transform.position, transform.rotation) as GameObject;
+    targeter = targetery.GetComponent<Targeter>();
+    
+    
+    // Instatiate search target, and unlock AI behaviour.
+    if(searchTarget == null) {
+      searchTarget = new GameObject("searchTarget");
+      
+    }
     UnlockAi();
   }
   
   public void Update () {
     
-    somethingClose = false; 
-    
-    /* Decrease lock timer, or if unlocked then make new decision. */
+    // Decrease lock timer, or if unlocked then make new decision.
     if (aiLocked) {
       aiTimer --;
       if (aiTimer <= 0) UnlockAi(); 
     } else {
       Decide();
     }
-    
-    /* Guns a'blazing, and also stop attack if target has been deleted (killed like a mofo). */
-    if (!attackTarget) {
-      StopAttack();
-    }
-    
-    /* Turning and Movement */
-    if (somethingClose) {
-      int dist = 20;
-      TurnTowards(new Vector3(moveTarget.position.x + Random.Range(-dist, dist), 0.0f, moveTarget.position.z + Random.Range(-dist, dist)));  
-    }
+
     TurnTowards(moveTarget.position);
-    
-    
-    
+    targeter.GiveOwner(moveTarget);   
     if(Vector3.Angle(moveTarget.position - transform.position, transform.forward) < accel) {
       Accelerate();
     } else {
@@ -86,9 +79,7 @@ public class AIMovement : ShipMovement {
     }
     Move();
     
-    if (aiAttack && RandomRoll() < attackRate) {
-      //Shoot();
-    }
+    
     
   }
   
@@ -109,10 +100,7 @@ public class AIMovement : ShipMovement {
     // Make sure ally is not self.
     if (nearestAllyPos == transform) {
       nearestAllyPos = null;
-    } else if (Vector3.Distance(nearestAllyPos.position, transform.position) < tooCloseDist) {
-      // Toggle too close varaible.
-      somethingClose = true; 
-    }
+    } 
     
     // Let the decision tree know if we found friend or not.
     if(nearestAllyPos) {
@@ -124,7 +112,7 @@ public class AIMovement : ShipMovement {
     }
   }
     
-  bool FollowClosestEnemy(int length, float maxDist, bool attack, bool mustBeInFront) {
+  bool FollowClosestEnemy(int length, float maxDist, bool mustBeInFront) {
     
     // Find closest enemy (removed if closest enemy is self).
     Transform nearestEnemyPos;
@@ -141,15 +129,7 @@ public class AIMovement : ShipMovement {
     // Make sure ally is not self.
     if (nearestEnemyPos == transform) {
       nearestEnemyPos = null;
-    } else if (Vector3.Distance(nearestEnemyPos.position, transform.position) < tooCloseDist) {
-      // Toggle too close varaible.
-      somethingClose = true; 
-    }
-    
-    // Toggle too close varaible.
-    if(Vector3.Distance(nearestEnemyPos.position, transform.position) < tooCloseDist) {
-        somethingClose = true; 
-    }
+    } 
     
     // Drop enemy if further away than the maximum distance.
     if (maxDist > 0 && nearestEnemyPos) {
@@ -158,8 +138,8 @@ public class AIMovement : ShipMovement {
       }
     }
     
-    if (mustBeInFront) {
-      Vector3 targetDir = moveTarget.position - transform.position;
+    if (mustBeInFront && nearestEnemyPos) {
+      Vector3 targetDir = nearestEnemyPos.position - transform.position;
       float angleBetween = Vector3.Angle(transform.forward, targetDir); 
       if (angleBetween > 0 - inFrontAngle * 0.5 && angleBetween < inFrontAngle * 0.5) {
         return false; 
@@ -168,9 +148,10 @@ public class AIMovement : ShipMovement {
     
     // Let the decision tree know if we found enemy or not.
     if (nearestEnemyPos) {
-      if(attack) SetAttackTarget(nearestEnemyPos.transform);
+      
       SetMoveTarget(nearestEnemyPos.transform);
       LockAi(length);
+      if(debugActions) Debug.Log("I am following " + nearestEnemyPos.name + " at: " + nearestEnemyPos.position);
       return true;
     } else {
       return false;
@@ -200,29 +181,15 @@ public class AIMovement : ShipMovement {
   #endregion
   
   #region Lock and Unlock AI Behaviour
-  void LockAi(int length) {
+  void LockAi(float length) {
     
     aiLocked = true;
     aiTimer = length;
   }
   
   void UnlockAi() {
-    StopAttack();
     aiLocked = false;
     aiTimer = 0;
-  }
-  #endregion
-  
-  #region Attack Behaviour
-  void StartAttack() {
-    
-    aiAttack = true;
-  }
-  
-  void StopAttack() {
-    
-    ReturnToHome();
-    aiAttack = false;
   }
   #endregion
   
@@ -232,31 +199,26 @@ public class AIMovement : ShipMovement {
   }
   #endregion
   
-  #region Setters (targets)
-  void SetAttackTarget(Transform target) {
-    StartAttack();
-    attackTarget = target;
-  }
-  
+  #region Setters (targets)  
   void SetMoveTarget(Transform target) {
     moveTarget = target;
   }
   #endregion
   
   #region Decision Tree
-  /* Make a decision based on the current situation (only runs if AI behaviour is unlocked) */
+  /// Make a decision based on the current situation (only runs if AI behaviour is unlocked)
   void Decide() {
     
-    /* Lets us know when to quit */
+    // Lets us know when to quit
     bool done;
     
-    /* If enemy within cone infront of this ship */
+    // If enemy within cone infront of this ship
     if (RandomRoll() < chanceFront.x) {
       
       if (RandomRoll() < chanceFront.y) {
-        done = FollowClosestEnemy(decisionTime * 10, distFront, true, true);
+        done = FollowClosestEnemy(decisionTime * 10, distFront, true);
       } else {
-        done = FollowClosestEnemy(decisionTime * 2, distFront, true, true);
+        done = FollowClosestEnemy(decisionTime * 2, distFront, true);
       }
       if (done) {
         if(debugActions) Debug.Log("following infront enemy");
@@ -264,23 +226,23 @@ public class AIMovement : ShipMovement {
       }
     }
     
-    /* If enemy is near */
+    // If enemy is near
     if (RandomRoll() < chanceNear.x) {
       
       if (RandomRoll() < chanceNear.y) {
-        done = FollowClosestEnemy(decisionTime * 10, distNear, true, false);
+        done = FollowClosestEnemy(decisionTime * 10, distNear, false);
       } else {
-        done = FollowClosestEnemy(decisionTime, distNear, true, false);
+        done = FollowClosestEnemy(decisionTime, distNear, false);
       }
       if (done) { 
-        if(debugActions) Debug.Log("following near enemy");
+        if(debugActions) Debug.Log("successfully following near enemy");
         return;
       }
     }
     
-    /* If ally is near */
+    // If ally is near
     if (RandomRoll() < chanceAlly && doISeekAllies) {
-      
+        
       done = FollowClosestFriend(decisionTime * 2);
       if (done) {
         if(debugActions) Debug.Log("following ally");
@@ -288,7 +250,7 @@ public class AIMovement : ShipMovement {
       }
     }
     
-    /* If far from objective */
+    // If far from objective
     if (RandomRoll() < chanceObjective && doISeekObjectives && Vector3.Distance(objective.position, transform.position) > distMin) {
       if(debugActions) Debug.Log("going to objective");
       
@@ -297,7 +259,7 @@ public class AIMovement : ShipMovement {
       return;
     }
     
-    /* If can do special objective, or retreat */
+    // If can do special objective, or retreat
     if (RandomRoll() < chanceRetreat && doIRetreat) {
       if(debugActions) Debug.Log("going home");
       
@@ -306,17 +268,19 @@ public class AIMovement : ShipMovement {
       return;
     }
     
-    /* If there are any enemies chase them down */
-    done = FollowClosestEnemy(decisionTime * 3, 0, false, false);
-    if (done) {
-      if(debugActions) Debug.Log("EODT - following enemy");
-      return;
+    // If there are any enemies chase them down
+    if (RandomRoll() < chanceAnyEnemy) {
+      done = FollowClosestEnemy(decisionTime * 3, 0, false);
+      if (done) {
+        if(debugActions) Debug.Log("EODT - following enemy");
+        return;
+      }
     }
     
-    /* If nothing else then search */
+    // If nothing else then search
     if(debugActions) Debug.Log("EODT - searching");
     Search();
-    LockAi(decisionTime * 4);
+    LockAi(decisionTime * 0.3f);
   }
   #endregion
 }

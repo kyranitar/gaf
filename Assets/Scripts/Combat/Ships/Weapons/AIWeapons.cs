@@ -7,7 +7,7 @@ public class AIWeapons : ShipWeapons {
 
   public void Update() {
     if (Random.Range(0, ShootChance) < 1) {
-      Fire();
+      //Fire();
     }
   }
 

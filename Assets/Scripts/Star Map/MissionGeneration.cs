@@ -54,7 +54,7 @@ public class MissionGeneration : MonoBehaviour {
         result[i] = makeShip(prefab, team, allyTarget, enemyTarget, enemyBase, enemyObjective);
       }
       int dist = 30;
-      result[i].transform.Translate(i * Random.Range(-dist, dist), 0, offset);
+      result[i].transform.Translate(Random.Range(-dist, dist), 0, Random.Range(-dist, dist));
     }
     
     if (hasPlayer) {
