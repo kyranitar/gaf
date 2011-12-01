@@ -7,19 +7,20 @@ using System.Collections;
 public class CameraZoom : MonoBehaviour {
 
 	public float InitialCameraZoom = 30;
-
+  public float ZoomSpeed = 5;
+  
+  private Transform cam;
+  
   public void Start() {
-    Transform cam = Camera.mainCamera.transform;
+    
+    cam = Camera.mainCamera.transform;
     Vector3 pos = cam.position;
     cam.position = new Vector3(pos.x, InitialCameraZoom, pos.z);
   }
 
   public void Update() {
-    if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-      Camera.mainCamera.transform.Translate(0, -1, 0);
-    } else if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-      Camera.mainCamera.transform.Translate(0, 1, 0);
-    }
+    
+    transform.Translate(0, 0, Time.deltaTime * Input.GetAxis("Mouse ScrollWheel") * ZoomSpeed, Camera.main.transform);
   }
 
 }

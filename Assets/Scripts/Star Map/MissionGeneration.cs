@@ -16,7 +16,6 @@ public class MissionGeneration : MonoBehaviour {
     GenerateMission();
   }
 
-  // Use this for initialization
   public void GenerateMission() {
     Instantiate(enemyBase);
     Instantiate(enemyObjective);
@@ -54,7 +53,8 @@ public class MissionGeneration : MonoBehaviour {
       } else {
         result[i] = makeShip(prefab, team, allyTarget, enemyTarget, enemyBase, enemyObjective);
       }
-      result[i].transform.Translate(i * 5, 0, offset);
+      int dist = 30;
+      result[i].transform.Translate(i * Random.Range(-dist, dist), 0, offset);
     }
     
     if (hasPlayer) {

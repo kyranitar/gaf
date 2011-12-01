@@ -5,7 +5,7 @@ using UnityEngine;
 /// Author: Timothy Jones
 public class ProjectileWeapon : Weapon {
 
-  public Transform ProjectilePrefab;
+  public GameObject ProjectilePrefab;
 
   /// The amount of damage to cause to a target if a projectile comes into contact.
   public float DamagePerProjectile;
@@ -25,7 +25,9 @@ public class ProjectileWeapon : Weapon {
 
     // Create the projectile and retrieve its behaviour.
     // The correct behaviour is to throw an exception if no such behaviour exists.
-    Transform projectile = Instantiate(ProjectilePrefab, pos, rot) as Transform;
+    GameObject projectile = Instantiate(ProjectilePrefab, pos, rot) as GameObject;
+    if (!projectile) Debug.Log("failed");
+    
     Projectile behaviour = projectile.GetComponent<Projectile>();
 
     // Set the stats from this weapon.

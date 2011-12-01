@@ -55,7 +55,10 @@ public class Missile : Projectile {
   }
 
   private void recalculateTarget() {
-    target = Targeting.FindNearestTarget(this.transform.position).transform;
+    GameObject target = Targeting.FindNearestTarget(this.transform.position);
+    if (target != null) {
+      this.target = target.transform;
+    }
   }
 
 }

@@ -10,6 +10,7 @@ public class AIMovement : ShipMovement {
   public bool doIRetreat;
   
   public int decisionTime = 120;
+  public float tooCloseDist = 10;
   public float inFrontAngle = 20;
   public float attackRate = 0.7f;
   public float accel = 160f;
@@ -35,6 +36,7 @@ public class AIMovement : ShipMovement {
   private int aiTimer;
   private bool aiLocked;
   private bool aiAttack;
+  private bool somethingClose;
   #endregion
   
   public void Start () {
@@ -52,6 +54,9 @@ public class AIMovement : ShipMovement {
   }
   
   public void Update () {
+    
+    somethingClose = false; 
+    
     /* Decrease lock timer, or if unlocked then make new decision. */
     if (aiLocked) {
       aiTimer --;
@@ -66,7 +71,14 @@ public class AIMovement : ShipMovement {
     }
     
     /* Turning and Movement */
+    if (somethingClose) {
+      int dist = 20;
+      TurnTowards(new Vector3(moveTarget.position.x + Random.Range(-dist, dist), 0.0f, moveTarget.position.z + Random.Range(-dist, dist)));  
+    }
     TurnTowards(moveTarget.position);
+    
+    
+    
     if(Vector3.Angle(moveTarget.position - transform.position, transform.forward) < accel) {
       Accelerate();
     } else {
@@ -83,25 +95,26 @@ public class AIMovement : ShipMovement {
   #region Following
   bool FollowClosestFriend(int length) {
     
-    /* Find closest ally (removed if closest ally is self). */
-    // old -- Transform nearestAllyPos = Targeting.FindNearestTag(bFriendly? "Friendly" : "Enemy", transform);
+    // Find closest ally (removed if closest ally is self).
+    Transform nearestAllyPos;
     TeamTarget target = gameObject.GetComponent<TargetMarker>().AlliedTargets;
-    Transform nearestAllyPos = target.FindNearestTarget(this.transform.position).transform;
-    if (nearestAllyPos == transform) nearestAllyPos = null;
     
-    /* Turn back on if player is tagged player
-    // If no allies found follow player (must be on players team)
-    if (bFriendly && !nearestAllyPos) {
-      nearestAllyPos = playerRef.transform;
+    GameObject nearestAlly = target.FindNearestTarget(this.transform.position);
+    if (nearestAlly != null) {
+      nearestAllyPos = nearestAlly.transform;
+    } else {
+      return false; 
     }
     
-    // If ally found, but player is closer then follow player (must be on players team)
-    if (bFriendly && DistanceFromPlayer() < Vector3.Distance(nearestAllyPos.position, transform.position)) {
-      nearestAllyPos = playerRef.transform;
+    // Make sure ally is not self.
+    if (nearestAllyPos == transform) {
+      nearestAllyPos = null;
+    } else if (Vector3.Distance(nearestAllyPos.position, transform.position) < tooCloseDist) {
+      // Toggle too close varaible.
+      somethingClose = true; 
     }
-    */
     
-    /* Let the decide method know if we found friend or not */
+    // Let the decision tree know if we found friend or not.
     if(nearestAllyPos) {
       SetMoveTarget(nearestAllyPos);
       LockAi(length);
@@ -109,31 +122,36 @@ public class AIMovement : ShipMovement {
     } else {
       return false;
     }
-    
   }
     
   bool FollowClosestEnemy(int length, float maxDist, bool attack, bool mustBeInFront) {
     
-    /* Find closest enemy (removed if closest enemy is self). */
-    // old -- Transform nearestEnemyPos = Targeting.FindNearestTag(bFriendly? "Enemy" : "Friendly", transform);
+    // Find closest enemy (removed if closest enemy is self).
+    Transform nearestEnemyPos;
     TeamTarget target = gameObject.GetComponent<TargetMarker>().EnemyTargets;
-    Transform nearestEnemyPos = target.FindNearestTarget(this.transform.position).transform;
     
-    if (nearestEnemyPos == transform) nearestEnemyPos = null;
-    
-    /* Turn back on if player is tagged player
-    // If no enemies found follow player (must not be on players team)
-    if (!bFriendly && !nearestEnemyPos) {
-      nearestEnemyPos = playerRef.transform;
+    // Try and find any enemy in the game.
+    GameObject nearestEnemy = target.FindNearestTarget(this.transform.position);
+    if (nearestEnemy != null) {
+      nearestEnemyPos = nearestEnemy.transform;
+    } else {
+      return false;
     }
     
-    //If enemy found, but player is close then follow player (must not be on players team)
-    if (!bFriendly && DistanceFromPlayer() < Vector3.Distance(nearestEnemyPos.position, transform.position)) {
-      nearestEnemyPos = playerRef.transform;  
+    // Make sure ally is not self.
+    if (nearestEnemyPos == transform) {
+      nearestEnemyPos = null;
+    } else if (Vector3.Distance(nearestEnemyPos.position, transform.position) < tooCloseDist) {
+      // Toggle too close varaible.
+      somethingClose = true; 
     }
-    */
     
-    /* Drop enemy if further away than the maximum distance. */
+    // Toggle too close varaible.
+    if(Vector3.Distance(nearestEnemyPos.position, transform.position) < tooCloseDist) {
+        somethingClose = true; 
+    }
+    
+    // Drop enemy if further away than the maximum distance.
     if (maxDist > 0 && nearestEnemyPos) {
       if (Vector3.Distance(nearestEnemyPos.position, transform.position) > maxDist) {
         return false;
@@ -148,7 +166,7 @@ public class AIMovement : ShipMovement {
       }
     }
     
-    /* Let the decide method know if we found enemy or not */
+    // Let the decision tree know if we found enemy or not.
     if (nearestEnemyPos) {
       if(attack) SetAttackTarget(nearestEnemyPos.transform);
       SetMoveTarget(nearestEnemyPos.transform);

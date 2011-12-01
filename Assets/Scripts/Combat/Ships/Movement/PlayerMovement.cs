@@ -5,11 +5,20 @@ using System.Collections;
 /// 
 /// Authors: Timothy Jones & Cam Owen & Richard Roberts
 public class PlayerMovement : ShipMovement {
-
+ 
+  private Transform cam;
+  
+  public void Start() {
+    
+    cam = Camera.mainCamera.gameObject.transform;
+  }
+  
   public void Update() {
-    if (Input.GetKey(KeyCode.W)) {
+    
+    float accel = Input.GetAxis("Vertical");
+    if (accel > 0) {
       Accelerate();
-    } else if (Input.GetKey(KeyCode.S)) {
+    } else if (accel < 0) {
       Decelerate();
     }
     
@@ -18,10 +27,9 @@ public class PlayerMovement : ShipMovement {
     
     // Move forwards.
     Move();
-
-    Transform cam = Camera.mainCamera.transform;
-    Vector3 pos = this.transform.position;
-    cam.position = new Vector3(pos.x, cam.position.y, pos.z);
+    
+    // Camera follow player.
+    cam.position = new Vector3(transform.position.x, cam.position.y, transform.position.z);
   }
   
 }
