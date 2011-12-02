@@ -28,10 +28,8 @@ public abstract class ShipMovement : MonoBehaviour {
     transform.position += transform.forward * currVelocity * Time.deltaTime;
   }
 
-  /* Turn to face the target at maximum turning speed. */
+  // Turn to face the target at maximum turning speed.
   protected void TurnTowards(Vector3 targetPosition) {
-    //float angle = Mathf.Atan2(targetPosition.y, targetPosition.x) * Mathf.Rad2Deg;
-    //transform.rotation = Quaternion.Euler(new Vector3(0, -angle + 90, 0));
     
     transform.rotation = Quaternion.RotateTowards(
                                                   transform.rotation, 
@@ -40,7 +38,7 @@ public abstract class ShipMovement : MonoBehaviour {
                                                   );
   }
   
-  /* Turn to face the mouse at maximum turning speed. */ // <- TODO put in unity methods
+  // Turn to face the mouse at maximum turning speed. <- TODO put in unity methods, instead of trig.
   protected void TurnTowardsMouse() {
     Vector3 mousePosition = Input.mousePosition;
     Vector3 objPosition = Camera.main.WorldToScreenPoint(transform.position);
