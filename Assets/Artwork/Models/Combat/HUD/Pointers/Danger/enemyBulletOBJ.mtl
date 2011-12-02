@@ -1,0 +1,36 @@
+newmtl hull:blinn18SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd hullBlue.png
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
+newmtl lambert2SG
+illum 4
+Kd 0.24 0.58 0.73
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert3SG
+illum 4
+Kd 0.86 1.00 0.37
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lambert4SG
+illum 4
+Kd 0.94 0.17 0.17
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl lowWing:blinn20SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd lowWingBlue.png
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
