@@ -16,6 +16,13 @@ public class ProjectileWeapon : Weapon {
   /// The life time of a projectile in seconds.
   public float ProjectileLifeTime;
 
+  /// Offset position
+  public Vector3 offset = new Vector3(-2.05f, 0.7f, -0.75f);
+
+  void Start() {
+    transform.Translate(offset);
+  }
+
   public override void Fire() {
     // Creates a new projectile object. Override for more detailed behaviour.
 
@@ -26,8 +33,6 @@ public class ProjectileWeapon : Weapon {
     // Create the projectile and retrieve its behaviour.
     // The correct behaviour is to throw an exception if no such behaviour exists.
     GameObject projectile = Instantiate(ProjectilePrefab, pos, rot) as GameObject;
-    if (!projectile) Debug.Log("failed");
-    
     Projectile behaviour = projectile.GetComponent<Projectile>();
 
     // Set the stats from this weapon.

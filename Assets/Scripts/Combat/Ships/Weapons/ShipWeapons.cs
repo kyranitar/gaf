@@ -9,7 +9,7 @@ public abstract class ShipWeapons : MonoBehaviour {
   /// The weapons available to this weapon system.
   /// Note that every WeaponSystem MUST have at least one weapon.
   public GameObject[] Weapons;
-
+  
   private int currentWeapon = 0;
   /// The index of the current weapon in the weapon list.
   public int CurrentWeapon {

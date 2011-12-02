@@ -5,7 +5,7 @@ public class SkillSet : MonoBehaviour {
 
   public GameObject[] Skills;
   public float iconSize = 40;
-  public float iconSpacing = 20;
+  public float iconSpacing = 80;
   public bool isPlayer;
 
   private skillIcon[] icons;
@@ -37,13 +37,15 @@ public class SkillSet : MonoBehaviour {
     
     if (Input.GetKeyDown(KeyCode.Z) && Skills.Length > 0) {
       Skills[0].GetComponent<Ability>().Activate(transform.position);
+    } else if (Input.GetKeyDown(KeyCode.X) && Skills.Length > 1) {
+      Skills[1].GetComponent<Ability>().Activate(transform.position);
     }
   }
 
   private skillIcon createIcon(int index, Texture image) {
     skillIcon icon = new skillIcon();
     icon.tex = image;
-    icon.pos = new Rect(Camera.main.GetScreenWidth() * 0.5f - iconSize * index + iconSpacing * index, Camera.main.GetScreenHeight() - iconSize * 2.0f, iconSize, iconSize);
+    icon.pos = new Rect(Camera.main.GetScreenWidth() * 0.5f - iconSize * index + (iconSize + iconSpacing) * index, Camera.main.GetScreenHeight() - iconSize * 2.0f, iconSize, iconSize);
     return icon;
   }
 

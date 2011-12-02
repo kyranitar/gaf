@@ -8,10 +8,9 @@ public abstract class Ability : MonoBehaviour {
   public Texture Image;
 
   /// Handles for ship damage, movement, and weapons
-  protected GameObject ship;
-  private ShipDamage damageHandle;
-  private ShipMovement movementHandle;
-  private ShipWeapons weaponHandle;
+  protected ShipDamage damageHandle;
+  protected ShipMovement movementHandle;
+  protected ShipWeapons weaponHandle;
 
   /// The effect this skill has on speed.
   protected float speed = 0;
@@ -37,6 +36,9 @@ public abstract class Ability : MonoBehaviour {
   private bool skillActive;
 
   public GameObject Ship {
+    get {
+      return Ship;
+    }
     set {
       damageHandle = value.GetComponent<ShipDamage>();
       movementHandle = value.GetComponent<ShipMovement>();
@@ -90,23 +92,17 @@ public abstract class Ability : MonoBehaviour {
   }
 
   /// Add things like a health top up, intsant damage, here.
-  protected void instantEffects() {
+  protected virtual void instantEffects() {
     // TO DO get ship object and implement instant effects
   }
 
   /// Add things like shields, rapid fire, and immunity here.
-  protected void addEffects() {
-    if (speed != 0) {
-      movementHandle.acceleration += speed;
-      movementHandle.maxSpeed += speed;
-    }
+  protected virtual void addEffects() {
+
   }
 
-  protected void removeEffects() {
-    if (speed != 0) {
-      movementHandle.acceleration -= speed;
-      movementHandle.maxSpeed -= speed;
-    }
+  protected virtual void removeEffects() {
+
   }
 
   // Add per second things here, such as +1 gold per cycle.

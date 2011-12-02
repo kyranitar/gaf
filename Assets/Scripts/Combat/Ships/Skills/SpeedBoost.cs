@@ -20,4 +20,15 @@ public class SpeedBoost : Ability {
 	public void Update () {
     updateSkill();
 	}
+
+  protected override void addEffects() {
+      movementHandle.acceleration += speed;
+      movementHandle.maxSpeed += speed;
+  }
+
+  protected override void removeEffects() {
+      movementHandle.acceleration -= speed;
+      movementHandle.maxSpeed -= speed;
+  }
+
 }
