@@ -7,6 +7,9 @@ public class StarMarker : UtilBehaviour {
 
   private static StarMarker currentDestination = null;
 
+  public Mission Mission;
+  private bool ascending = false;
+
   public bool IsDestination {
     set {
       if (value == false) {
@@ -33,6 +36,18 @@ public class StarMarker : UtilBehaviour {
 
   public void Update() {
     this.transform.Rotate(0, RotationSpeed * Time.deltaTime, 0);
+
+    if (Mission != null) {
+      Material mat = this.renderer.material;
+      Color c = mat.color;
+      if (c.b <= 0) {
+        ascending = true;
+      } else if (c.b >= 255) {
+        ascending = false;
+      }
+
+      mat.color = new Color(c.r, c.g, c.b + (ascending ? 1 : 0));
+    }
   }
 
   public void OnMouseUpAsButton(){

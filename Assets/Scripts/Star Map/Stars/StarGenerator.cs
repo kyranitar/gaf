@@ -11,6 +11,8 @@ public class StarGenerator : MonoBehaviour {
   public Vector2 BottomLeft;
   public Vector2 BottomRight;
 
+  public GameObject CombatPlayerPrefab;
+
   private static Vector2[] positions = null;
 
   public void Start() {
@@ -76,7 +78,10 @@ public class StarGenerator : MonoBehaviour {
     for (int i = 0; i < positions.Length; i++) {
       Vector3 pos = new Vector3(positions[i].x, 0.01f, positions[i].y);
       Quaternion rot = new Quaternion(0, 0, 0, 0);
-      Instantiate(StarPrefab, pos, rot);
+      GameObject star = Instantiate(StarPrefab, pos, rot) as GameObject;
+      if (i == 1) {
+//        star.GetComponent<Star>().Marker.GetComponent<StarMarker>().Mission = new Mission(CombatPlayerPrefab);
+      }
     }
     
     Instantiate(PlayerPrefab);
