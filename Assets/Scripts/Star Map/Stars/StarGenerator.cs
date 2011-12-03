@@ -80,7 +80,7 @@ public class StarGenerator : MonoBehaviour {
       Quaternion rot = new Quaternion(0, 0, 0, 0);
       GameObject star = Instantiate(StarPrefab, pos, rot) as GameObject;
       if (i == 1) {
-//        star.GetComponent<Star>().Marker.GetComponent<StarMarker>().Mission = new Mission(CombatPlayerPrefab);
+        star.GetComponent<Star>().Marker.GetComponent<StarMarker>().Mission = new Mission(CombatPlayerPrefab);
       }
     }
     
