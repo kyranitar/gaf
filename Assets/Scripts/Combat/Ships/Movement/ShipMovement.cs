@@ -25,6 +25,11 @@ public abstract class ShipMovement : MonoBehaviour {
   }
   
   protected void Move() {
+
+    if(currVelocity > maxSpeed) {
+      currVelocity = maxSpeed;
+    }
+
     transform.position += transform.forward * currVelocity * Time.deltaTime;
   }
 
