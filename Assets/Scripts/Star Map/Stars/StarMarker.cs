@@ -5,6 +5,8 @@ public class StarMarker : UtilBehaviour {
 
   public float RotationSpeed = 50;
 
+  public float PulseRate = 1;
+
   private static StarMarker currentDestination = null;
 
   public Mission Mission;
@@ -42,11 +44,11 @@ public class StarMarker : UtilBehaviour {
       Color c = mat.color;
       if (c.b <= 0) {
         ascending = true;
-      } else if (c.b >= 255) {
+      } else if (c.b >= 1) {
         ascending = false;
       }
 
-      mat.color = new Color(c.r, c.g, c.b + (ascending ? 1 : 0));
+      mat.color = new Color(c.r, c.g, c.b + PulseRate * Time.deltaTime * (ascending ? 1 : -1));
     }
   }
 
@@ -56,8 +58,10 @@ public class StarMarker : UtilBehaviour {
     GameObject player = GameObject.FindGameObjectWithTag("Player");
     
     if (ThisY(player.transform.position) == transform.position) {
+      // Prevent the tester from firing.
+//      MissionGeneration.isActive = false;
       Application.LoadLevel("Combat");
-
+//      Mission.BuildMission();
     } else if (this != currentDestination) {
       Player pScript = player.GetComponent<Player>();
       pScript.Stop();

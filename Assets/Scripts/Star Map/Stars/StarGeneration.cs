@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class StarGenerator : MonoBehaviour {
+public class StarGeneration : MonoBehaviour {
 
   public int StarCount = 10;
   public GameObject StarPrefab;
@@ -12,6 +12,7 @@ public class StarGenerator : MonoBehaviour {
   public Vector2 BottomRight;
 
   public GameObject CombatPlayerPrefab;
+  public GameObject[] CombatTeamPrefabs;
 
   private static Vector2[] positions = null;
 
@@ -79,9 +80,22 @@ public class StarGenerator : MonoBehaviour {
       Vector3 pos = new Vector3(positions[i].x, 0.01f, positions[i].y);
       Quaternion rot = new Quaternion(0, 0, 0, 0);
       GameObject star = Instantiate(StarPrefab, pos, rot) as GameObject;
+
+      Star script = star.GetComponent<Star>();
+      GameObject marker = Instantiate(script.Marker, pos, rot) as GameObject;
+      marker.transform.parent = star.transform;
+
       if (i == 1) {
-        star.GetComponent<Star>().Marker.GetComponent<StarMarker>().Mission = new Mission(CombatPlayerPrefab);
+
+        Mission mission = new Mission(CombatPlayerPrefab);
+        foreach (GameObject prefab in CombatTeamPrefabs) {
+          mission.AddTeam(prefab, Random.Range(15, 20));
+        }
+
+        marker.GetComponent<StarMarker>().Mission = mission;
       }
+
+      script.Marker = marker;
     }
     
     Instantiate(PlayerPrefab);

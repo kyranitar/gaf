@@ -10,13 +10,19 @@ public class MissionGeneration : MonoBehaviour {
 
   public GameObject PlayerPrefab;
 
-	public void Start () {
-	  Mission mission = new Mission(PlayerPrefab);
+  public static bool isActive = true;
+
+  public void Start() {
+    if (!isActive) {
+      return;
+    }
+
+    Mission mission = new Mission(PlayerPrefab);
     foreach (GameObject prefab in TeamPrefabs) {
       mission.AddTeam(prefab, TeamShipCount);
     }
-
+    
     mission.BuildMission();
-	}
-
+  }
+  
 }
