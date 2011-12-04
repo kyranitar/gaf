@@ -4,7 +4,7 @@ using System.Collections;
 public abstract class Ability : MonoBehaviour {
 
   /// Name and GUI Image for skill.
-  protected string skillName;
+  public string SkillName;
   public Texture Image;
 
   /// Handles for ship damage, movement, and weapons

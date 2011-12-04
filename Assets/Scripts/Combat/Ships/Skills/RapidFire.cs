@@ -11,7 +11,6 @@ public class RapidFire : Ability {
   private GameObject shipWeaponHandle = null;
 
   public void Start() {
-    skillName = "Rapid Fire";
     duration = ActiveLength;
     cooldownTime = Cooldown;
     Castable = true;

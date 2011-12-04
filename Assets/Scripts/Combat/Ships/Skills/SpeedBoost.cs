@@ -7,28 +7,26 @@ public class SpeedBoost : Ability {
   public float ActiveLength;
   public float Cooldown;
 
-	public void Start () {
-    skillName = "Speed Boost";
-
+  public void Start() {
     speed = SpeedIncrease;
     duration = ActiveLength;
     cooldownTime = Cooldown;
-
+    
     Castable = true;
-	}
+  }
 
-	public void Update () {
+  public void Update() {
     updateSkill();
-	}
+  }
 
   protected override void addEffects() {
-      movementHandle.acceleration += speed;
-      movementHandle.maxSpeed += speed;
+    movementHandle.acceleration += speed;
+    movementHandle.maxSpeed += speed;
   }
 
   protected override void removeEffects() {
-      movementHandle.acceleration -= speed;
-      movementHandle.maxSpeed -= speed;
+    movementHandle.acceleration -= speed;
+    movementHandle.maxSpeed -= speed;
   }
-
+  
 }
