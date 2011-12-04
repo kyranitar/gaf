@@ -2,13 +2,6 @@
 
 public class PlayerWeapons : ShipWeapons {
 
-  public float FireRate = 1;
-
-  private float reloadTime = 1;
-
-  private float reloadTimeLeft;
-  private bool reloaded = true;
-
   public void Update() {
 
     if (Input.GetKeyUp(KeyCode.Alpha1) && Weapons.Length > 0) {
@@ -19,18 +12,7 @@ public class PlayerWeapons : ShipWeapons {
       CurrentWeapon = 2;
     }
 
-    if(!reloaded) {
-      reloadTimeLeft -= FireRate;
-
-      if (reloadTimeLeft <= 0) {
-        reloadTimeLeft = 0;
-        reloaded = true;
-      }
-    }
-
-    if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0) && reloaded) {
-      reloaded = false;
-      reloadTimeLeft = reloadTime;
+    if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) {
       Fire();
     }
   }

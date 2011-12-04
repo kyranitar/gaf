@@ -36,25 +36,17 @@ public abstract class Ability : MonoBehaviour {
   /// Cooldown timers and handle
   private float cooldownTimeLeft;
   private bool skillActive;
-  
-  private GameObject testShip;
-  
-  public void setShip(GameObject ship){
-    this.testShip = ship;
-  }
-  
-  public GameObject getShip(){
-    return testShip;
-  }
 
+  private GameObject ship;
   public GameObject Ship {
     get {
-      return Ship;
+      return ship;
     }
     set {
       damageHandle = value.GetComponent<ShipDamage>();
       movementHandle = value.GetComponent<ShipMovement>();
       weaponHandle = value.GetComponent<ShipWeapons>();
+      ship = value;
     }
   }
 
@@ -104,24 +96,13 @@ public abstract class Ability : MonoBehaviour {
     }
   }
 
-  /// Add things like a health top up, intsant damage, here.
-  protected virtual void instantEffects() {
-    // TO DO get ship object and implement instant effects
-  }
+  protected virtual void instantEffects() {}
 
-  /// Add things like shields, rapid fire, and immunity here.
-  protected virtual void addEffects() {
+  protected virtual void addEffects() {}
 
-  }
+  protected virtual void removeEffects() {}
 
-  protected virtual void removeEffects() {
-
-  }
-
-  // Add per second things here, such as +1 gold per cycle.
-  protected void durationEffects() {
-    
-  }
+  protected virtual void durationEffects() {}
 
   // Add things like weapon drops, and flares here.
   protected void SpawnObject(GameObject prefab, Transform parent) {

@@ -24,7 +24,7 @@ public class SpaceFlare : Ability {
     Vector3 pos = this.position;
     Quaternion rot = new Quaternion(0,0,0,0);
     GameObject[] flares = new GameObject[NumFlares];
-    GameObject ship = this.GetComponent<Ability>().getShip();
+    GameObject ship = this.GetComponent<Ability>().Ship;
     TeamTarget allies = ship.GetComponent<TargetMarker>().AlliedTargets;
     TeamTarget enemies = ship.GetComponent<TargetMarker>().EnemyTargets;
     CombatTeam team = ship.GetComponent<TeamMarker>().Team;

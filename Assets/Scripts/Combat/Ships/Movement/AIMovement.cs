@@ -6,13 +6,10 @@ public class AIMovement : ShipMovement {
   #region Fields Set in Unity GUI
   public bool debugActions;
   public bool doISeekAllies;
-  public bool doISeekObjectives;
-  public bool doIRetreat;
 
   public int decisionTime = 120;
   public float tooCloseDist = 10;
   public float inFrontAngle = 20;
-  public float attackRate = 0.7f;
   public float accel = 160f;
   public int range = 10;
 
@@ -40,8 +37,6 @@ public class AIMovement : ShipMovement {
   #endregion
 
   public void Start() {
-    objective = gameObject.GetComponent<Locations>().objectiveLocation;
-    home = gameObject.GetComponent<Locations>().baseLocation;
     
     // Update distances
     distFront *= range;
@@ -160,16 +155,6 @@ public class AIMovement : ShipMovement {
   }
   #endregion
 
-  #region Return to area
-  void ReturnToHome() {
-    SetMoveTarget(home);
-  }
-
-  void ReturnToObjective() {
-    SetMoveTarget(objective);
-  }
-  #endregion
-
   #region Search
   void Search() {
     /* Move randomly, to appear as though searching. */    
@@ -251,26 +236,6 @@ public class AIMovement : ShipMovement {
           Debug.Log("following ally");
         return;
       }
-    }
-    
-    // If far from objective
-    if (RandomRoll() < chanceObjective && doISeekObjectives && Vector3.Distance(objective.position, transform.position) > distMin) {
-      if (debugActions)
-        Debug.Log("going to objective");
-      
-      ReturnToObjective();
-      LockAi(decisionTime * 2);
-      return;
-    }
-    
-    // If can do special objective, or retreat
-    if (RandomRoll() < chanceRetreat && doIRetreat) {
-      if (debugActions)
-        Debug.Log("going home");
-      
-      ReturnToHome();
-      LockAi(decisionTime * 2);
-      return;
     }
     
     // If there are any enemies chase them down

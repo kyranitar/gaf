@@ -20,6 +20,9 @@ public class ProjectileWeapon : Weapon {
   public Vector3 offset = new Vector3(-2.05f, 0.7f, -0.75f);
 
   // Weapon Cooldown
+  public float CooldownLength;
+
+  private float cooldown;
 
   void Start() {
     transform.Translate(offset);
@@ -27,6 +30,7 @@ public class ProjectileWeapon : Weapon {
 
   void Update() {
 
+    cooldown --;
   }
 
   /// Creates a new projectile object. Override for more detailed behaviour.

@@ -4,15 +4,13 @@ using System.Collections;
 public class RapidFire : Ability {
 
   public bool isPlayer;
-  public float FireRateIncrease;
+  public float FireRateMultiplier;
   public float ActiveLength;
   public float Cooldown;
 
-  private PlayerWeapons playerWeaponHandle;
-  private AIWeapons aiWeaponHandle;
+  private GameObject shipWeaponHandle = null;
 
   public void Start() {
-
     skillName = "Rapid Fire";
     duration = ActiveLength;
     cooldownTime = Cooldown;
@@ -20,24 +18,20 @@ public class RapidFire : Ability {
   }
 
   public void Update() {
-
-    if(isPlayer && playerWeaponHandle == null) {
-      GameObject player = GameObject.FindGameObjectWithTag("Player");
-      playerWeaponHandle = player.GetComponent<PlayerWeapons>();
+    if (shipWeaponHandle == null) {
+      ShipWeapons weaponSys = Ship.GetComponent<ShipWeapons>();
+      shipWeaponHandle = weaponSys.Weapons[weaponSys.CurrentWeapon];
     }
     updateSkill();
   }
 
   protected override void addEffects() {
-    if (isPlayer) {
-      playerWeaponHandle.FireRate += FireRateIncrease;
-    }
+    shipWeaponHandle.GetComponent<ProjectileWeapon>().CooldownLength /= FireRateMultiplier;
   }
 
   protected override void removeEffects() {
-    if (isPlayer) {
-      playerWeaponHandle.FireRate -= FireRateIncrease;
-    }
+    shipWeaponHandle.GetComponent<ProjectileWeapon>().CooldownLength *= FireRateMultiplier;
+    shipWeaponHandle = null;
   }
   
 }
