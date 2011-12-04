@@ -4,7 +4,7 @@ public class PlayerWeapons : ShipWeapons {
 
   public float FireRate = 1;
 
-  private float reloadTime = 50;
+  private float reloadTime = 1;
 
   private float reloadTimeLeft;
   private bool reloaded = true;

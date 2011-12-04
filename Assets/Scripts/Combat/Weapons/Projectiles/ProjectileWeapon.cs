@@ -19,12 +19,24 @@ public class ProjectileWeapon : Weapon {
   /// Offset position
   public Vector3 offset = new Vector3(-2.05f, 0.7f, -0.75f);
 
+  // Weapon Cooldown
+
   void Start() {
     transform.Translate(offset);
   }
 
+  void Update() {
+
+  }
+
+  /// Creates a new projectile object. Override for more detailed behaviour.
   public override void Fire() {
-    // Creates a new projectile object. Override for more detailed behaviour.
+
+    // If cooldown is not finished then return, otherwise set the cooldown;
+    if (cooldown > 0) {
+      return;
+    }
+    cooldown = CooldownLength;
 
     // Retrieve these values to shorten up the following code.
     Vector3 pos = transform.position;

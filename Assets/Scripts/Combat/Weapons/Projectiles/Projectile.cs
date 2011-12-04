@@ -23,36 +23,15 @@ public class Projectile : MonoBehaviour {
   }
 
   public virtual void Update() {
-    if (!checkCollision()) {
-      transform.position += transform.forward * Speed * Time.deltaTime;
-    }
+     transform.position += transform.forward * Speed * Time.deltaTime;
   }
 
   /// Checks if the projectile is about to hit a target.
   /// If so, it causes damage to the target and is destroyed.
-  private bool checkCollision() {
-    Vector3 pos = transform.position;
-
-    // Raycast one frame ahead of the missile to check if it's about to collide.
-    RaycastHit ray;
-    bool hit = Physics.Raycast(pos, transform.forward, out ray, Speed * Time.deltaTime);
-
-    if (!hit) {
-      return false;
-    }
-
-    GameObject collider = ray.collider.gameObject;
-    if (Targeting.IsTargeting(collider)) {
-      // This projectile has hit a target. Cause damage.
-      collider.GetComponent<ShipDamage>().ModifyDamage(Damage);
-
-      // This projectile is gone.
+  void OnTriggerEnter(Collider other) {
+    if (Targeting.IsTargeting(other.gameObject)) {
+      other.gameObject.GetComponent<ShipDamage>().ModifyDamage(Damage);
       Destroy(gameObject);
-
-      return true;
     }
-
-    return false;
   }
-
 }

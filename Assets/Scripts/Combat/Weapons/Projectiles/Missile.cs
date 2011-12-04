@@ -22,6 +22,7 @@ public class Missile : Projectile {
   private Transform target = null;
 
   public override void Update() {
+
     // If our target no longer exists, pick out a new one.
     if (target == null) {
       recalculateTarget();
