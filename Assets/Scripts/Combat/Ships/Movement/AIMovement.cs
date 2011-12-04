@@ -7,10 +7,12 @@ public class AIMovement : ShipMovement {
   public bool debugActions;
   public bool doISeekAllies;
 
-  public int decisionTime = 120;
-  public float tooCloseDist = 10;
-  public float inFrontAngle = 20;
   public float accel = 160f;
+  public int accelMultiplier = 5;
+  public int decelMultiplier = 1;
+
+  public int decisionTime = 120;
+  public float inFrontAngle = 20;
   public int range = 10;
 
   public Vector2 chanceFront = new Vector2(0.85f, 0.1f);
@@ -75,9 +77,15 @@ public class AIMovement : ShipMovement {
     //targeter.GiveOwner(moveTarget);
 
     if (Vector3.Angle(moveTarget.position - transform.position, transform.forward) < accel) {
-      Accelerate();
+      // Hack
+      for (int i = 0; i < accelMultiplier; i++) {
+        Accelerate();
+      }
     } else {
-      Decelerate();
+      // Hack
+      for (int i = 0; i < decelMultiplier; i++) {
+        Decelerate();
+      }
     }
     Move();
   }
