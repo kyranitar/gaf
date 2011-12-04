@@ -11,6 +11,8 @@ public class PlayerMovement : ShipMovement {
   public void Start() {
     
     cam = Camera.mainCamera.gameObject.transform;
+
+    transform.Rotate(Vector3.up, -90);
   }
   
   public void Update() {
@@ -24,7 +26,7 @@ public class PlayerMovement : ShipMovement {
     
     // Rotate to face mouse.
     TurnTowardsMouse();
-    
+
     // Move forwards.
     Move();
     

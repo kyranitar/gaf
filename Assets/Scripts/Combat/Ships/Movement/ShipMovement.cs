@@ -7,55 +7,74 @@ public abstract class ShipMovement : MonoBehaviour {
   public float maxSpeed = 11f;
   public float acceleration = 4f;
   public float turnSpeed = 280;
-  
+
   private float currVelocity = 0f;
 
   protected void Accelerate() {
     currVelocity += acceleration * Time.deltaTime;
-    if(currVelocity > maxSpeed) {
+    if (currVelocity > maxSpeed) {
       currVelocity = maxSpeed;
     }
   }
-  
+
   protected void Decelerate() {
     currVelocity -= acceleration * 0.5f * currVelocity * Time.deltaTime;
-    if(currVelocity < 0) {
+    if (currVelocity < 0) {
       currVelocity = 0;
     }
   }
-  
-  protected void Move() {
 
-    if(currVelocity > maxSpeed) {
+  protected void Move() {
+    
+    if (currVelocity > maxSpeed) {
       currVelocity = maxSpeed;
     }
-
+    
     transform.position += transform.forward * currVelocity * Time.deltaTime;
   }
 
   // Turn to face the target at maximum turning speed.
   protected void TurnTowards(Vector3 targetPosition) {
     
-    transform.rotation = Quaternion.RotateTowards(
-                                                  transform.rotation, 
-                                                  Quaternion.LookRotation(targetPosition - transform.position, transform.up),
-                                                  turnSpeed * Time.deltaTime
-                                                  );
+    transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetPosition - transform.position, transform.up), turnSpeed * Time.deltaTime);
   }
-  
+
   // Turn to face the mouse at maximum turning speed. <- TODO put in unity methods, instead of trig.
   protected void TurnTowardsMouse() {
-    Vector3 mousePosition = Input.mousePosition;
+    
+        /*Vector3 mousePosition = Input.mousePosition;
     Vector3 objPosition = Camera.main.WorldToScreenPoint(transform.position);
     mousePosition.x = mousePosition.x - objPosition.x;
     mousePosition.y = mousePosition.y - objPosition.y;
     float angle = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
-    transform.rotation = Quaternion.Euler(new Vector3(0, -angle + 90, 0));  
+    transform.rotation = Quaternion.Euler(new Vector3(0, -angle + 90, 0));*/
+
+Vector3 mousePosition = Input.mousePosition;
+    Vector3 objPosition = Camera.main.WorldToScreenPoint(transform.position);
+    mousePosition.x = mousePosition.x - objPosition.x;
+    mousePosition.y = mousePosition.y - objPosition.y;
+    float angle = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg - 90;
+    float angleDiff = angle + transform.rotation.eulerAngles.y;
+    if (angleDiff > 180) {
+      angleDiff -= 360;
+    } else if (angleDiff < -180) {
+      angleDiff += 360;
+    }
+    
+    
+    //Debug.Log(angleDiff);
+    
+    if (angleDiff > 0) {
+      transform.Rotate(Vector3.up, -turnSpeed);
+    } else if (angleDiff < 0) {
+      transform.Rotate(Vector3.up, turnSpeed);
+    }
+    
   }
 
   protected float DistanceFromPlayer() {
-    GameObject player = GameObject.FindGameObjectWithTag("Player"); 
+    GameObject player = GameObject.FindGameObjectWithTag("Player");
     return Vector3.Distance(transform.position, player.transform.position);
   }
-
+  
 }

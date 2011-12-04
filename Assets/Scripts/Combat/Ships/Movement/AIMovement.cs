@@ -16,8 +16,6 @@ public class AIMovement : ShipMovement {
   public Vector2 chanceFront = new Vector2(0.85f, 0.1f);
   public Vector2 chanceNear = new Vector2(0.9f, 0.05f);
   public float chanceAlly = 0.9f;
-  public float chanceObjective = 0.9f;
-  public float chanceRetreat = 0.95f;
   public float chanceAnyEnemy = 0.5f;
 
   public float distFront = 1.2f;
@@ -141,7 +139,10 @@ public class AIMovement : ShipMovement {
     if (mustBeInFront && nearestEnemyPos) {
       Vector3 targetDir = nearestEnemyPos.position - transform.position;
       float angleBetween = Vector3.Angle(transform.forward, targetDir);
-      if (angleBetween > 0 - inFrontAngle * 0.5 && angleBetween < inFrontAngle * 0.5) {
+      float offset = 0;
+      if (angleBetween > 0 - inFrontAngle * 0.5 + offset && angleBetween < inFrontAngle * 0.5 + offset) {
+
+      } else {
         return false;
       }
     }
@@ -224,9 +225,9 @@ public class AIMovement : ShipMovement {
     if (RandomRoll() < chanceNear.x) {
       
       if (RandomRoll() < chanceNear.y) {
-        done = FollowClosestEnemy(decisionTime * 10, distNear, false, true);
+        done = FollowClosestEnemy(decisionTime * 10, distNear, false, false);
       } else {
-        done = FollowClosestEnemy(decisionTime, distNear, false, true);
+        done = FollowClosestEnemy(decisionTime, distNear, false, false);
       }
       if (done) {
         if (debugActions)
@@ -248,7 +249,7 @@ public class AIMovement : ShipMovement {
     
     // If there are any enemies chase them down
     if (RandomRoll() < chanceAnyEnemy) {
-      done = FollowClosestEnemy(decisionTime * 3, 0, false, true);
+      done = FollowClosestEnemy(decisionTime * 3, 0, false, false);
       if (done) {
         if (debugActions)
           Debug.Log("EODT - following enemy");
