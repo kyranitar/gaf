@@ -1,0 +1,62 @@
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript" src="http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject.js"></script>
+<div id="fb-root"></div>
+
+<script type='text/javascript'>
+
+	//Fired when the facebook sdk has loaded
+	window.fbAsyncInit = function()
+	{
+		FB.init(
+		{
+		  appId      : '240667755997026',
+		  status     : true, // check login status
+		  cookie     : true, // enable cookies to allow the server to access the session
+		  oauth      : true, // enable OAuth 2.0
+		  xfbml      : false // dont parse XFBML
+		});
+
+		//Get the current login status.
+		FB.getLoginStatus(function(loginStatusResponse)
+		{
+			if(!loginStatusResponse.authResponse) //Not logged in, log him in
+				FB.login();
+		});
+
+	};
+
+
+	function GetCurrentUser() {
+		//Do a graph request to /me
+		FB.api('/me', function(meResponse)	 {
+			getUnity().SendMessage("FacebookManager", //Game object name, make sure this exists!
+									"GetCurrentUserComplete", //Method to call
+									meResponse.id); //Our serialized facebook data
+			alert('Got Facebook User!');
+		});
+	}
+
+	//Load the Facebook JS SDK
+	(function(d){
+	 var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+	 js = d.createElement('script'); js.id = id; js.async = true;
+	 js.src = "//connect.facebook.net/en_US/all.js";
+	 d.getElementsByTagName('head')[0].appendChild(js);
+	}(document));
+
+
+	function getUnity()
+	{
+		if (typeof unityObject != "undefined")
+		{
+			return unityObject.getObjectById("unityPlayer");
+		}
+		return null;
+	}
+	if (typeof unityObject != "undefined")
+	{
+		unityObject.embedUnity("unityPlayer", "WebPlayer.unity3d", 960, 640);
+	}
+</script>
+
+<div id='unityPlayer'></div>
