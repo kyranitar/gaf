@@ -23,6 +23,7 @@ public class SkillSet : MonoBehaviour {
     for (int i = 0; i < length; i++) {
 
       GameObject skill = Instantiate(Skills[i]) as GameObject;
+      skill.GetComponent<Ability>().setShip(gameObject);
       Ability script = skill.GetComponent<Ability>();
       script.Ship = gameObject;
       Skills[i] = skill;
@@ -39,6 +40,8 @@ public class SkillSet : MonoBehaviour {
       Skills[0].GetComponent<Ability>().Activate(transform.position);
     } else if (Input.GetKeyDown(KeyCode.X) && Skills.Length > 1) {
       Skills[1].GetComponent<Ability>().Activate(transform.position);
+    } else if (Input.GetKeyDown(KeyCode.C) && Skills.Length > 2) {
+      Skills[2].GetComponent<Ability>().Activate(transform.position);
     }
   }
 

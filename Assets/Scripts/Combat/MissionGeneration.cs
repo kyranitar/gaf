@@ -18,9 +18,11 @@ public class MissionGeneration : MonoBehaviour {
     }
 
     Mission mission = new Mission(PlayerPrefab);
-    foreach (GameObject prefab in TeamPrefabs) {
-      mission.AddTeam(prefab, TeamShipCount);
-    }
+    //foreach (GameObject prefab in TeamPrefabs) {
+    //  mission.AddTeam(prefab, TeamShipCount);
+   // }
+    mission.AddTeam(TeamPrefabs[0],0);
+    mission.AddTeam(TeamPrefabs[1],100);
     
     mission.BuildMission();
   }

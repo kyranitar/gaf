@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/// Randomly generates stars for the star map.
+/// 
+/// Authors: Timothy Jones and Daniel Atkins
+
 public class StarGeneration : MonoBehaviour {
 
   public int StarCount = 10;

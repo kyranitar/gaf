@@ -37,6 +37,8 @@ public class TeamTarget {
     GameObject result = null;
 
     // Loop over every ship, checking if this missile is targeting their team.
+    // TODO: Also loop over space-flares! Possibly by marking flares as your team.
+    // TODO: Seperate missiles and ships, so flares can work properly.
     foreach (GameObject ship in TeamMarker.GetAllMarkedGameObjects()) {
       CombatTeam team = ship.GetComponent<TeamMarker>().Team;
       if (IsTargeting(team)) {

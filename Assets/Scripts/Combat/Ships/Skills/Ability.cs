@@ -12,6 +12,8 @@ public abstract class Ability : MonoBehaviour {
   protected ShipMovement movementHandle;
   protected ShipWeapons weaponHandle;
 
+  protected Vector3 position;
+  
   /// The effect this skill has on speed.
   protected float speed = 0;
 
@@ -34,6 +36,16 @@ public abstract class Ability : MonoBehaviour {
   /// Cooldown timers and handle
   private float cooldownTimeLeft;
   private bool skillActive;
+  
+  private GameObject testShip;
+  
+  public void setShip(GameObject ship){
+    this.testShip = ship;
+  }
+  
+  public GameObject getShip(){
+    return testShip;
+  }
 
   public GameObject Ship {
     get {
@@ -69,6 +81,7 @@ public abstract class Ability : MonoBehaviour {
 
   public void Activate(Vector3 position) {
     if (Castable) {
+      this.position = position;
       instantEffects();
       addEffects();
       Castable = false;

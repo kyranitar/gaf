@@ -69,8 +69,12 @@ public class AIMovement : ShipMovement {
     } else {
       Decide();
     }
-    
-    TurnTowards(moveTarget.position);
+    if(moveTarget == null){
+      UnlockAi();
+      Decide();
+    } else {
+      TurnTowards(moveTarget.position);
+    }
     //targeter.GiveOwner(moveTarget);
     if (Vector3.Angle(moveTarget.position - transform.position, transform.forward) < accel) {
       Accelerate();
