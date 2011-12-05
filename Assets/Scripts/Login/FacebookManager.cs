@@ -11,6 +11,6 @@ public class FacebookManager : MonoBehaviour
     }
     public void GetCurrentUserComplete(string fbid)
     {
-        Controller.FacebookId = fbid;
+        FacebookController.FacebookId = fbid;
     }
 }
