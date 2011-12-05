@@ -6,3 +6,4 @@ Temp/
 *.sln
 *.suo
 *.userprefs
+.DS_Store
