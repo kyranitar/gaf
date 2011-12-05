@@ -29,7 +29,7 @@ public class Projectile : MonoBehaviour {
   /// Checks if the projectile is about to hit a target.
   /// If so, it causes damage to the target and is destroyed.
   void OnTriggerEnter(Collider other) {
-    if (Targeting.IsTargeting(other.gameObject)) {
+    if (Targeting.IsTargeting(other.gameObject) && other.gameObject.tag != "Flare") {
       other.gameObject.GetComponent<ShipDamage>().ModifyDamage(Damage);
       Destroy(gameObject);
     }
