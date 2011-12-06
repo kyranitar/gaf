@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class FacebookManager : MonoBehaviour
-{
-    void Start()
-    {
-        Application.ExternalCall("GetCurrentUser");
-    }
-    public void GetCurrentUserComplete(string fbid)
-    {
-        FacebookController.FacebookId = fbid;
-    }
+public class FacebookManager : MonoBehaviour {
+
+  public void Start() {
+    Application.ExternalCall("sendCurrentUser");
+  }
+
+  public void SetFacebookUserID(string fbid) {
+    FacebookController.FacebookId = fbid;
+  }
+
 }
