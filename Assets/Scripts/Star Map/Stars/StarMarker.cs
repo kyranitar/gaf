@@ -57,7 +57,7 @@ public class StarMarker : UtilBehaviour {
     
     GameObject player = GameObject.FindGameObjectWithTag("Player");
     
-    if (ThisY(player.transform.position) == transform.position) {
+    if (Mission != null && ThisY(player.transform.position) == this.transform.position) {
       // Prevent the tester from firing.
 //      MissionGeneration.isActive = false;
       Application.LoadLevel("Combat");
