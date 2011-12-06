@@ -80,6 +80,7 @@ public class StarGeneration : MonoBehaviour {
       }
     }
 
+    int which = Random.Range(1, positions.Length - 1);
     for (int i = 0; i < positions.Length; i++) {
       Vector3 pos = new Vector3(positions[i].x, 0.01f, positions[i].y);
       Quaternion rot = new Quaternion(0, 0, 0, 0);
@@ -89,8 +90,7 @@ public class StarGeneration : MonoBehaviour {
       GameObject marker = Instantiate(script.Marker, pos, rot) as GameObject;
       marker.transform.parent = star.transform;
 
-      if (i == 1) {
-
+      if (i == which) {
         Mission mission = new Mission(CombatPlayerPrefab);
         foreach (GameObject prefab in CombatTeamPrefabs) {
           mission.AddTeam(prefab, Random.Range(15, 20));

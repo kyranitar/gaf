@@ -27,19 +27,25 @@ public class ShipDamage : MonoBehaviour {
   /// If the modification causes the object to be destroyed, this will be carried out.
   public void ModifyDamage(float amount) {
     Damage += amount;
-
+    
     if (Damage < 0) {
       Damage = 0;
     } else if (Damage >= TotalHealth) {
       DebrisCreation debris = gameObject.GetComponent<DebrisCreation>();
-
+      
       // It's acceptable not to have a debris creator.
       if (debris != null) {
         debris.CreateDebris();
       }
-
+      
       Destroy(gameObject);
+
+      OnDeath();
     }
   }
 
+  protected virtual void OnDeath() {
+
+  }
+  
 }
