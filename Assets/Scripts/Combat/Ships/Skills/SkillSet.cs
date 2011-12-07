@@ -6,7 +6,7 @@ public class SkillSet : MonoBehaviour {
   public GameObject[] Skills;
   public float iconSize = 40;
   public float iconSpacing = 80;
-  //public bool isPlayer;
+  public bool isPlayer;
 
   //private skillIcon[] icons;
 
@@ -16,21 +16,23 @@ public class SkillSet : MonoBehaviour {
   }
 
   public void Start() {
-
+    
     int length = Skills.Length;
     //icons = new skillIcon[Skills.Length];
-
+    
     for (int i = 0; i < length; i++) {
       GameObject skill = Instantiate(Skills[i]) as GameObject;
       skill.GetComponent<Ability>().Ship = gameObject;
-      Ability script = skill.GetComponent<Ability>();
-
-      script.Ship = gameObject;
+      Ability abilityBase = skill.GetComponent<Ability>();
+      
+      abilityBase.Ship = gameObject;
       Skills[i] = skill;
       
-      /*if (isPlayer) {
-        icons[i] = createIcon(i, script.Image);
-      }*/
+      if (isPlayer) {
+        Cursor cursorRef = GameObject.Find("Cursor").GetComponent<Cursor>();
+        cursorRef.AddAbilityReference(abilityBase);
+        //icons[i] = createIcon(i, script.Image);
+      }
     }
   }
 
@@ -42,15 +44,15 @@ public class SkillSet : MonoBehaviour {
   }
 
   void OnGUI() {
-    /*foreach (skillIcon icon in icons) {
+  }
+  /*foreach (skillIcon icon in icons) {
       GUI.Button(icon.pos, icon.tex);
     }*/
-  }
 
   public void OnDestroy() {
     foreach (GameObject skill in Skills) {
       Destroy(skill);
     }
   }
-
+  
 }

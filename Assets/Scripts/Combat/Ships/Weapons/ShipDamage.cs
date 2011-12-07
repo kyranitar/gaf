@@ -20,17 +20,22 @@ public class ShipDamage : MonoBehaviour {
   public int MaximumDebrisCount = 9;
 
   /// Damage count.
-  private float Damage;
+  private float damage;
+  public float Damage {
+    get {
+      return damage;
+    }
+  }
 
   /// Modify the damage amount.
   /// Negative values remove damage, but will never fall below zero.
   /// If the modification causes the object to be destroyed, this will be carried out.
   public void ModifyDamage(float amount) {
-    Damage += amount;
+    damage += amount;
     
-    if (Damage < 0) {
-      Damage = 0;
-    } else if (Damage >= TotalHealth) {
+    if (damage < 0) {
+      damage = 0;
+    } else if (damage >= TotalHealth) {
       DebrisCreation debris = gameObject.GetComponent<DebrisCreation>();
       
       // It's acceptable not to have a debris creator.

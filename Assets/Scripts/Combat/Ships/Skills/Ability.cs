@@ -25,16 +25,38 @@ public abstract class Ability : MonoBehaviour {
 
   /// How long the skill's effects last for (optional).
   protected float duration = 0;
+  public float Duration {
+    get {
+      return duration;
+    }
+  }
 
   /// How long the cooldown lasts.
   protected float cooldownTime;
+  public float CooldownTime {
+    get {
+      return cooldownTime;
+    }
+  }
 
   /// Active timers and handle
   public bool Castable = false;
+
   private float activeTimeLeft;
+  public float ActiveTimeLeft {
+    get {
+      return activeTimeLeft;
+    }
+  }
 
   /// Cooldown timers and handle
   private float cooldownTimeLeft;
+  public float CooldownTimeLeft {
+    get {
+      return cooldownTimeLeft;
+    }
+  }
+
   private bool skillActive;
 
   private GameObject ship;

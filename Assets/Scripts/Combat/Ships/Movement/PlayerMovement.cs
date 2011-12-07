@@ -7,12 +7,13 @@ using System.Collections;
 public class PlayerMovement : ShipMovement {
  
   private Transform cam;
-  
+
   public void Start() {
-    
+
     cam = Camera.mainCamera.gameObject.transform;
 
     transform.Rotate(Vector3.up, -90);
+
   }
   
   public void Update() {
@@ -33,5 +34,5 @@ public class PlayerMovement : ShipMovement {
     // Camera follow player.
     cam.position = new Vector3(transform.position.x, cam.position.y, transform.position.z);
   }
-  
 }
+

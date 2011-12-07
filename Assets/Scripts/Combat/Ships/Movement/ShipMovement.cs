@@ -55,13 +55,10 @@ public abstract class ShipMovement : MonoBehaviour {
       angleDiff += 360;
     }
     
-    
-    //Debug.Log(angleDiff);
-    
     if (angleDiff > 0) {
-      transform.Rotate(Vector3.up, -turnSpeed);
+      transform.Rotate(Vector3.up, -Mathf.Min(turnSpeed, Mathf.Abs(angleDiff)));
     } else if (angleDiff < 0) {
-      transform.Rotate(Vector3.up, turnSpeed);
+      transform.Rotate(Vector3.up, Mathf.Min(turnSpeed, Mathf.Abs(angleDiff)));
     }
     
   }
