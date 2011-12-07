@@ -9,14 +9,12 @@ public class PlayerMovement : ShipMovement {
   private Transform cam;
   
   public void Start() {
-    
     cam = Camera.mainCamera.gameObject.transform;
 
     transform.Rotate(Vector3.up, -90);
   }
   
   public void Update() {
-    
     float accel = Input.GetAxis("Vertical");
     if (accel > 0) {
       Accelerate();

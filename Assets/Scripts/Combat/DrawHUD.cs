@@ -12,17 +12,17 @@ public class DrawHUD : MonoBehaviour {
 
   private GUIStyle cHealthBarStyle = new GUIStyle();
 
-  void Start() {
+  public void Start() {
     cHealthBarStyle.alignment = TextAnchor.UpperLeft;
     cHealthBarStyle.normal.textColor = Color.white;
     cHealthBarStyle.fontStyle = FontStyle.Bold;
   }
 
-  void OnGUI() {
+  public void OnGUI() {
     DrawAbilityBar();
   }
 
-  void DrawAbilityBar() {
+  public void DrawAbilityBar() {
     Rect AbilityIcon = new Rect(Camera.main.GetScreenWidth() / 2 - 2 * cAbilityIconSize - 1.5f * cAbilityIconSpacing, Camera.main.GetScreenHeight() - cAbilityIconSize - cAbilityIconSpacing,
                                 cAbilityIconSize, cAbilityIconSize);
 
