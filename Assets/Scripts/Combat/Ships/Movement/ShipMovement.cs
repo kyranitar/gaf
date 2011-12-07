@@ -42,19 +42,13 @@ public abstract class ShipMovement : MonoBehaviour {
   // Turn to face the mouse at maximum turning speed. <- TODO put in unity methods, instead of trig.
   protected void TurnTowardsMouse() {
     
-        /*Vector3 mousePosition = Input.mousePosition;
-    Vector3 objPosition = Camera.main.WorldToScreenPoint(transform.position);
-    mousePosition.x = mousePosition.x - objPosition.x;
-    mousePosition.y = mousePosition.y - objPosition.y;
-    float angle = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
-    transform.rotation = Quaternion.Euler(new Vector3(0, -angle + 90, 0));*/
-
-Vector3 mousePosition = Input.mousePosition;
+    Vector3 mousePosition = Input.mousePosition;
     Vector3 objPosition = Camera.main.WorldToScreenPoint(transform.position);
     mousePosition.x = mousePosition.x - objPosition.x;
     mousePosition.y = mousePosition.y - objPosition.y;
     float angle = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg - 90;
     float angleDiff = angle + transform.rotation.eulerAngles.y;
+
     if (angleDiff > 180) {
       angleDiff -= 360;
     } else if (angleDiff < -180) {
