@@ -57,7 +57,7 @@ public class AIMovement : ShipMovement {
     UnlockAi();
   }
 
-  public void Update() {
+  public override void Update() {
     // Decrease lock timer, or if unlocked then make new decision.
     if (aiLocked) {
       aiTimer--;
@@ -87,7 +87,8 @@ public class AIMovement : ShipMovement {
         Decelerate();
       }
     }
-    Move();
+
+    base.Update();
   }
 
   #region Following

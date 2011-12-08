@@ -10,25 +10,15 @@ public class PlayerMovement : ShipMovement {
   
   public void Start() {
     cam = Camera.mainCamera.gameObject.transform;
-
-    transform.Rotate(Vector3.up, -90);
+    this.transform.Rotate(Vector3.up, -90);
   }
   
-  public void Update() {
-    float accel = Input.GetAxis("Vertical");
-    if (accel > 0) {
-      Accelerate();
-    } else if (accel < 0) {
-      Decelerate();
-    }
-    
-    // Rotate to face mouse.
-    TurnTowardsMouse();
+  public override void Update() {
+    base.Update();
 
-    // Move forwards.
-    Move();
-    
-    // Camera follow player.
+    // The remaining changes are handled by the PlayerControls component.
+
+    // Make the camera follow player.
     cam.position = new Vector3(transform.position.x, cam.position.y, transform.position.z);
   }
   

@@ -20,13 +20,13 @@ public class SpeedBoost : Ability {
   }
 
   protected override void addEffects() {
-    movementHandle.acceleration += speed;
-    movementHandle.maxSpeed += speed;
+    movementHandle.Acceleration += speed;
+    movementHandle.MaxSpeed += speed;
   }
 
   protected override void removeEffects() {
-    movementHandle.acceleration -= speed;
-    movementHandle.maxSpeed -= speed;
+    movementHandle.Acceleration -= speed;
+    movementHandle.MaxSpeed -= speed;
   }
   
 }

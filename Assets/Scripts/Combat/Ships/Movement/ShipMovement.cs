@@ -4,77 +4,52 @@ using System.Collections;
 /// The basic movement for a ship.
 public abstract class ShipMovement : MonoBehaviour {
 
-  public float maxSpeed = 11f;
-  public float acceleration = 4f;
-  public float turnSpeed = 280;
+  public float MaxSpeed = 11;
+  public float Acceleration = 4;
+  public float Deceleration = 4;
+  public float TurnSpeed = 280;
 
-  private float currVelocity = 0f;
+  private float currVelocity = 0;
 
-  protected void Accelerate() {
-    currVelocity += acceleration * Time.deltaTime;
-    if (currVelocity > maxSpeed) {
-      currVelocity = maxSpeed;
+  public virtual void Update() {
+    if (currVelocity > MaxSpeed) {
+      currVelocity = MaxSpeed;
+    }
+    
+    this.transform.position += this.transform.forward * currVelocity * Time.deltaTime;
+  }
+
+  public void Accelerate() {
+    currVelocity += Acceleration * Time.deltaTime;
+    if (currVelocity > MaxSpeed) {
+      currVelocity = MaxSpeed;
     }
   }
 
-  protected void Decelerate() {
-    currVelocity -= acceleration * 0.5f * currVelocity * Time.deltaTime;
+  public void Decelerate() {
+    currVelocity -= Deceleration * currVelocity * Time.deltaTime;
     if (currVelocity < 0) {
       currVelocity = 0;
     }
   }
 
-  protected void Move() {
-    
-    if (currVelocity > maxSpeed) {
-      currVelocity = maxSpeed;
-    }
-    
-    transform.position += transform.forward * currVelocity * Time.deltaTime;
+  public void TurnLeft() {
+    this.transform.Rotate(0, -TurnSpeed * Time.deltaTime, 0);
   }
 
-  // Turn to face the target at maximum turning speed.
-  protected void TurnTowards(Vector3 targetPosition) {
-    
-    transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetPosition - transform.position, transform.up), turnSpeed * Time.deltaTime);
+  public void TurnRight() {
+    this.transform.Rotate(0, TurnSpeed * Time.deltaTime, 0);
   }
 
-  // Turn to face the mouse at maximum turning speed. <- TODO put in unity methods, instead of trig.
-  protected void TurnTowardsMouse() {
-    
-        /*Vector3 mousePosition = Input.mousePosition;
-    Vector3 objPosition = Camera.main.WorldToScreenPoint(transform.position);
-    mousePosition.x = mousePosition.x - objPosition.x;
-    mousePosition.y = mousePosition.y - objPosition.y;
-    float angle = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
-    transform.rotation = Quaternion.Euler(new Vector3(0, -angle + 90, 0));*/
-
-Vector3 mousePosition = Input.mousePosition;
-    Vector3 objPosition = Camera.main.WorldToScreenPoint(transform.position);
-    mousePosition.x = mousePosition.x - objPosition.x;
-    mousePosition.y = mousePosition.y - objPosition.y;
-    float angle = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg - 90;
-    float angleDiff = angle + transform.rotation.eulerAngles.y;
-    if (angleDiff > 180) {
-      angleDiff -= 360;
-    } else if (angleDiff < -180) {
-      angleDiff += 360;
-    }
-    
-    
-    //Debug.Log(angleDiff);
-    
-    if (angleDiff > 0) {
-      transform.Rotate(Vector3.up, -turnSpeed);
-    } else if (angleDiff < 0) {
-      transform.Rotate(Vector3.up, turnSpeed);
-    }
-    
+  /// Turn to face the given point at maximum turning speed.
+  public void TurnTowards(float x, float y, float z) {
+    TurnTowards(new Vector3(x, y, z));
   }
 
-  protected float DistanceFromPlayer() {
-    GameObject player = GameObject.FindGameObjectWithTag("Player");
-    return Vector3.Distance(transform.position, player.transform.position);
+  /// Turn to face the given point at maximum turning speed.
+  public void TurnTowards(Vector3 targetPosition) {
+    Quaternion look = Quaternion.LookRotation(targetPosition - transform.position, transform.up);
+    transform.rotation = Quaternion.RotateTowards(transform.rotation, look, TurnSpeed * Time.deltaTime);
   }
   
 }
