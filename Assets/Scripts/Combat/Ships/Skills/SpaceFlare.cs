@@ -9,9 +9,11 @@ public class SpaceFlare : Ability {
   public GameObject FlarePrefab;
   public int NumFlares;
   public float Cooldown;
+  public float ActiveLength;
 
   public void Start() {
     cooldownTime = Cooldown;
+    activeTime = ActiveLength;
     Castable = true;
   }
 

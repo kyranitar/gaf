@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 public class Cursor : MonoBehaviour {
 
-  public GameObject[] cooldownBars;
-  private List<Ability> abilities;
-
   private Vector3 planeNormal = new Vector3(0, 1, 0);
   private float cameraDist;
   private float currentProjectedNormal;
@@ -17,20 +14,10 @@ public class Cursor : MonoBehaviour {
 
   public void Start() {
 
-    // Maximum of four skills for now.
-    abilities = new List<Ability>();
     mainCamera = findCamera();
-
-    float angle = 360 / cooldownBars.Length;
-    for (int i=0; i < cooldownBars.Length; i++) {
-      cooldownBars[i] = Instantiate(cooldownBars[i], transform.position, transform.rotation) as GameObject;
-      cooldownBars[i].transform.Rotate(Vector3.up, i * angle);
-      cooldownBars[i].transform.parent = transform;
-    }
   }
 
   public void Update() {
-    resizeBars();
     move();
   }
 
@@ -64,25 +51,5 @@ public class Cursor : MonoBehaviour {
     yPos = transform.position.y;
     transform.position = new Vector3(transform.position.x, yPos, transform.position.z);
 
-  }
-
-  private void resizeBars() {
-
-    for (int i = 0; i < abilities.Count; i++) {
-
-      if (i > cooldownBars.Length) {
-        Debug.LogError("Not enough cooldown bars");
-        return;
-      }
-
-      float maxCooldown = abilities[i].CooldownTime + abilities[i].Duration;
-      float timeLeft =  abilities[i].CooldownTimeLeft + abilities[i].ActiveTimeLeft;
-      float scaleAmount = (timeLeft == maxCooldown) ? 0.0f : (maxCooldown - timeLeft) / maxCooldown;
-      cooldownBars[i].transform.localScale = new Vector3(1.0f, 1.0f, scaleAmount);
-    }
-  }
-
-  public void AddAbilityReference(Ability ability) {
-    abilities.Add(ability);
   }
 }

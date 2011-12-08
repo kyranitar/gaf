@@ -6,6 +6,7 @@ public abstract class Ability : MonoBehaviour {
   /// Name and GUI Image for skill.
   public string SkillName;
   public Texture Image;
+  public bool isOffensive;
 
   /// Handles for ship damage, movement, and weapons
   protected ShipDamage damageHandle;
@@ -24,10 +25,10 @@ public abstract class Ability : MonoBehaviour {
   protected bool immunity = false;
 
   /// How long the skill's effects last for (optional).
-  protected float duration = 0;
-  public float Duration {
+  protected float activeTime;
+  public float ActiveTime {
     get {
-      return duration;
+      return activeTime;
     }
   }
 
@@ -99,7 +100,7 @@ public abstract class Ability : MonoBehaviour {
       instantEffects();
       addEffects();
       Castable = false;
-      skillActivate(duration);
+      skillActivate(activeTime);
       cooldownTimeLeft = cooldownTime;
     }
   }

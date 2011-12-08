@@ -30,6 +30,9 @@ public class RadialBar : MonoBehaviour {
 
   private float minAngle;
   public float MinAngle {
+    get {
+      return minAngle;
+    }
     set {
       minAngle = value;
     }
@@ -37,6 +40,9 @@ public class RadialBar : MonoBehaviour {
 
   private float maxAngle;
   public float MaxAngle {
+    get {
+      return maxAngle;
+    }
     set {
       maxAngle = value;
     }
@@ -44,10 +50,9 @@ public class RadialBar : MonoBehaviour {
 
   private uint segmentCount;
   private uint currentIndex;
-  private List<GameObject> segments;
+  private List<GameObject> segments = new List<GameObject>();
 
-  public void Start() {
-
+  public virtual void Start() {
     segments = new List<GameObject>();
     segmentCount = (uint) Mathf.Floor((maxAngle - minAngle) / SegmentAngle);
 
@@ -60,11 +65,9 @@ public class RadialBar : MonoBehaviour {
     }
   }
 
-
-
-  public void Update() {
-
+  public virtual void Update() {
     uint index = (uint) Mathf.Floor(currentValue / totalValue * segments.Count);
+    //Debug.Log(index);
     if (index != currentIndex) {
 
       for (int i = 0; i < segments.Count; i++) {
@@ -74,14 +77,17 @@ public class RadialBar : MonoBehaviour {
           segments[i].renderer.enabled = false;
         }
       }
-
       currentIndex = index;
     }
   }
 
   public void LateUpdate() {
-
     transform.eulerAngles = new Vector3(0, 0, 0);
   }
 
+  protected void SetColor(Color col) {
+    foreach(GameObject seg in segments) {
+      seg.renderer.material.color = col;
+    }
+  }
 }

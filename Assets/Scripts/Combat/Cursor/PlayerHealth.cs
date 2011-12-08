@@ -20,7 +20,6 @@ public class PlayerHealth : RadialBar {
   }
 
   public new void Update() {
-
     CurrentValue = TotalValue - damageScript.Damage;
     base.Update();
 

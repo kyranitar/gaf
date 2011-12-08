@@ -9,7 +9,7 @@ public class SpeedBoost : Ability {
 
   public void Start() {
     speed = SpeedIncrease;
-    duration = ActiveLength;
+    activeTime = ActiveLength;
     cooldownTime = Cooldown;
     
     Castable = true;
