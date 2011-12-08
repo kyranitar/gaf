@@ -9,7 +9,6 @@ public class FPS : MonoBehaviour {
   // Use this for initialization
   void Start () {
     timeA = Time.timeSinceLevelLoad;
-//    DontDestroyOnLoad (this);
   }
   
   // Update is called once per frame
