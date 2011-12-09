@@ -16,13 +16,20 @@ public class PlayerActivation : MonoBehaviour {
   }
 
   public void SetBehavioursEnabled(bool enabled) {
+
     foreach (MonoBehaviour com in GetComponents<MonoBehaviour>()) {
       if (com != this && !(com is ModuleFactory)) {
         com.enabled = enabled;
       }
     }
+
     GetComponent<PlayerSkills>().Enabled = enabled;
     GetComponent<PlayerWeapons>().Enabled = enabled;
+
+    GameObject controls = GameObject.FindGameObjectWithTag("PlayerControls");
+    if (controls != null) {
+      controls.GetComponent<PlayerControls>().enabled = enabled;
+    }
   }
 
   public void SetFactoriesEnabled(bool enabled) {

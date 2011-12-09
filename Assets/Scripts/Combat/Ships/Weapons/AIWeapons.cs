@@ -8,6 +8,18 @@ public class AIWeapons : ShipWeapons {
   public float missilesChanceDecrease;
   public float shootAngle = 20;
 
+  public void Start() {
+    // Replace the prefabs in Weapons with real instances.
+    int length = weapons.Count;
+    TeamTarget enemies = GetComponent<TargetMarker>().EnemyTargets;
+    for (int i = 0; i < length; i++) {
+      GameObject weapon = Instantiate(weapons[i], transform.position, transform.rotation) as GameObject;
+      weapon.transform.parent = this.transform;
+      weapon.GetComponent<Weapon>().targeting = enemies;
+      weapons[i] = weapon;
+    }
+  }
+
   public void Update() {
     // TODO - dynamically select weapon types.
     if (Target == null) {

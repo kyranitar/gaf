@@ -51,8 +51,8 @@ public class Mission {
       player.GetComponent<TargetMarker>().EnemyTargets = enemies;
 
       PlayerActivation activater = player.GetComponent<PlayerActivation>();
-      activater.SetBehavioursEnabled(true);
       activater.Recreate();
+      activater.SetBehavioursEnabled(true);
       activater.Show();
 
     }

@@ -11,20 +11,6 @@ public abstract class ShipWeapons : MonoBehaviour {
   /// Note that every WeaponSystem MUST have at least one weapon.
   public List<GameObject> weapons;
 
-  public bool Enabled {
-    get {
-      return this.enabled;
-    }
-    set {
-      this.enabled = value;
-      foreach(GameObject weapon in weapons) {
-        foreach(MonoBehaviour component in weapon.GetComponents<MonoBehaviour>()) {
-          component.enabled = value;
-        }
-      }
-    }
-  }
-
   // TODO make this private to hide it from unity
   /// The index of the currently selected weapon.
   private int currentWeapon = 0;
@@ -38,18 +24,6 @@ public abstract class ShipWeapons : MonoBehaviour {
       if (value >= 0 && value < weapons.Count) {
         currentWeapon = value;
       }
-    }
-  }
-
-  public void Start() {
-    // Replace the prefabs in Weapons with real instances.
-    int length = weapons.Count;
-    TeamTarget enemies = GetComponent<TargetMarker>().EnemyTargets;
-    for (int i = 0; i < length; i++) {
-      GameObject weapon = Instantiate(weapons[i], transform.position, transform.rotation) as GameObject;
-      weapon.transform.parent = this.transform;
-      weapon.GetComponent<Weapon>().targeting = enemies;
-      weapons[i] = weapon;
     }
   }
 

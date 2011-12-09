@@ -6,7 +6,7 @@ public abstract class PlayerControls : MonoBehaviour {
   protected ShipMovement movement;
 
   public virtual void Start() {
-    this.movement = GetComponent<ShipMovement>();
+    this.movement = GameObject.FindGameObjectWithTag("ShipBlueprint").GetComponent<ShipMovement>();
   }
 
   protected bool isDown(KeyCode key) {

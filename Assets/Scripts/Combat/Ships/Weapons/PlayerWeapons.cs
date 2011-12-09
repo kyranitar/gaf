@@ -2,6 +2,23 @@
 
 public class PlayerWeapons : ShipWeapons {
 
+  public bool Enabled {
+    get {
+      return this.enabled;
+    }
+    set {
+      this.enabled = value;
+      Debug.Log("A");
+      foreach(GameObject weapon in weapons) {
+        Debug.Log("b");
+        foreach(MonoBehaviour component in weapon.GetComponents<MonoBehaviour>()) {
+          Debug.Log("enabled weapon");
+          component.enabled = value;
+        }
+      }
+    }
+  }
+
   public void Update() {
     if (Input.GetKeyUp(KeyCode.Alpha1) && weapons.Count > 0) {
       CurrentWeapon = 0;
@@ -19,10 +36,12 @@ public class PlayerWeapons : ShipWeapons {
   public void Recreate() {
     weapons.Clear();
 
+    TeamTarget enemies = GetComponent<TargetMarker>().EnemyTargets;
     // Run over factory and get relevant modules, and add to the weapons.
     foreach(ModuleFactory module in GetComponents<ModuleFactory>()){
       if(module.FactoryType == "Weapon") {
         foreach(GameObject weapon in module.Modules) {
+          weapon.GetComponent<Weapon>().targeting = enemies;
           weapons.Add(weapon);
           weapon.transform.parent = transform;
         }
