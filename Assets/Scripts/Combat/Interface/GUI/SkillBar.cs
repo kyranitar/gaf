@@ -46,20 +46,6 @@ public class SkillBar : RadialBar {
 
   public void Init() {
 
-    if(controller.isOffensive) {
-      // Anchor to cursor
-      transform.position = GameObject.Find("Cursor").transform.position;
-      transform.parent = GameObject.Find("Cursor").transform;
-      MinAngle = (360.0f / offensiveSkillCount) * skillIndex;
-      MaxAngle = MinAngle + 360.0f / offensiveSkillCount;
-    } else {
-      // Anchor to player
-      transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
-      transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
-      MinAngle = (360.0f / defensiveSkillCount) * SkillIndex;
-      MaxAngle = MinAngle + 360.0f / defensiveSkillCount;
-    }
-
     base.Start();
 
     // Set different colors, TODO change this to materials
@@ -89,5 +75,22 @@ public class SkillBar : RadialBar {
     }
     //Debug.Log(controller.name + " " + controller.CooldownTimeLeft + " " + controller.ActiveTimeLeft);
     base.Update();
+  }
+
+  public void Attach() {
+
+    if(controller.isOffensive) {
+      // Anchor to cursor
+      transform.position = GameObject.Find("Cursor").transform.position;
+      transform.parent = GameObject.Find("Cursor").transform;
+      MinAngle = (360.0f / offensiveSkillCount) * skillIndex;
+      MaxAngle = MinAngle + 360.0f / offensiveSkillCount;
+    } else {
+      // Anchor to player
+      transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
+      transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
+      MinAngle = (360.0f / defensiveSkillCount) * SkillIndex;
+      MaxAngle = MinAngle + 360.0f / defensiveSkillCount;
+    }
   }
 }

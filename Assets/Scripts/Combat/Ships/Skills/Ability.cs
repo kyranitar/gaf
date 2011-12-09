@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+/* TODO
+ * remove uneccesary booleans
+ *
+ */
+
 public abstract class Ability : MonoBehaviour {
 
   /// Name and GUI Image for skill.
@@ -58,8 +63,10 @@ public abstract class Ability : MonoBehaviour {
     }
   }
 
+  /// Whether or not the skill is active.
   private bool skillActive;
 
+  /// Sets the ship, and the compoents it needs to run the ability.
   private GameObject ship;
   public GameObject Ship {
     get {
@@ -127,7 +134,7 @@ public abstract class Ability : MonoBehaviour {
 
   protected virtual void durationEffects() {}
 
-  // Add things like weapon drops, and flares here.
+  /// Add things like weapon drops, and flares here.
   protected void SpawnObject(GameObject prefab, Transform parent) {
     Instantiate(prefab, parent.position, parent.rotation);
     // TODO add combat team to game object, so it knows what to attack / hurt
