@@ -24,38 +24,36 @@ public class ProjectileWeapon : Weapon {
 
   private float cooldown;
 
-  void Start() {
+  public void Start() {
     transform.Translate(offset);
   }
 
-  void Update() {
-
-    cooldown --;
+  public void Update() {
+    cooldown--;
   }
 
   /// Creates a new projectile object. Override for more detailed behaviour.
   public override void Fire() {
-
     // If cooldown is not finished then return, otherwise set the cooldown;
     if (cooldown > 0) {
       return;
     }
     cooldown = CooldownLength;
-
+    
     // Retrieve these values to shorten up the following code.
     Vector3 pos = transform.position;
     Quaternion rot = transform.rotation;
-
+    
     // Create the projectile and retrieve its behaviour.
     // The correct behaviour is to throw an exception if no such behaviour exists.
     GameObject projectile = Instantiate(ProjectilePrefab, pos, rot) as GameObject;
     Projectile behaviour = projectile.GetComponent<Projectile>();
-
+    
     // Set the stats from this weapon.
     behaviour.Damage = DamagePerProjectile;
     behaviour.Speed = ProjectileSpeed;
     behaviour.LifeTime = ProjectileLifeTime;
-    behaviour.Targeting = Targeting;
+    behaviour.Targeting = targeting;
   }
-
+  
 }

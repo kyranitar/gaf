@@ -24,6 +24,10 @@ public class CustomizeGUI : MonoBehaviour {
     GameObject shipPrefab = GameObject.FindGameObjectWithTag("ShipBlueprint");
     factories = shipPrefab.GetComponents<ModuleFactory>();
     toolbarStrings = new string[3] { "Weapons", "Skills", "Movement" };
+
+    PlayerActivation activater = shipPrefab.GetComponent<PlayerActivation>();
+    activater.SetFactoriesEnabled(true);
+    activater.Show();
   }
 
   public void OnGUI() {
@@ -45,20 +49,18 @@ public class CustomizeGUI : MonoBehaviour {
     }
 
     if (GUI.Button(new Rect(100, 200, 50, 50), "Back")) {
-      Application.LoadLevel("Star Map");
-    }
-
-    if (GUI.Button(new Rect(200, 200, 50, 50), "Activate")) {
       GameObject shipPrefab = GameObject.FindGameObjectWithTag("ShipBlueprint");
-      shipPrefab.GetComponent<PlayerSkills>().RecreateSkills();
+      PlayerActivation activater = shipPrefab.GetComponent<PlayerActivation>();
+      activater.Hide();
+      activater.SetFactoriesEnabled(false);
+      Application.LoadLevel("Star Map");
     }
 
     if (GUI.Button(new Rect(300, 200, 50, 50), "Turn on")) {
       GameObject shipPrefab = GameObject.FindGameObjectWithTag("ShipBlueprint");
-      PlayerActivation pAct = shipPrefab.GetComponent<PlayerActivation>();
-      if (!pAct.IsActive) {
-        pAct.TurnOn();
-      }
+      PlayerActivation activater = shipPrefab.GetComponent<PlayerActivation>();
+      activater.SetFactoriesEnabled(true);
+      activater.Show();
     }
   }
 

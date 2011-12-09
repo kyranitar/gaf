@@ -24,7 +24,8 @@ public class ModuleFactory : MonoBehaviour {
     }
   }
 
-  /// Temporary index for what module to add and remove. This will be updated by the menu system in the customize screen, eventually.
+  // TODO Remove this.
+  // Temporary index for what module to add and remove. This will be updated by the menu system in the customize screen, eventually.
   private int currentIndex = 0;
 
   public void Start() {
@@ -33,6 +34,10 @@ public class ModuleFactory : MonoBehaviour {
 
   /// Adds a given module to the player (modules are specified in the unity interface, on the 'Ship' (if not ship, it will be 'PlayerShip') prefab).
   public void AddModule() {
+    // TODO Remove this dependency on currentIndex and the if statement checking the bounds.
+    if (currentIndex >= Prefabs.Length) {
+      return;
+    }
 
     GameObject module = Instantiate(Prefabs[currentIndex++], transform.position + Positions[modules.Count], transform.rotation) as GameObject;
     module.transform.parent = this.transform;
@@ -46,6 +51,11 @@ public class ModuleFactory : MonoBehaviour {
 
   /// Removes a module based on the currentIndex (currentIndex will eventually reflect what the player has selected in the menu system).
   public void RemoveModule() {
+    // TODO Remove this dependency on currentIndex and the if statement checking the bounds.
+    if (currentIndex <= 0) {
+      return;
+    }
+
     GameObject module = modules[currentIndex--];
     modules.Remove(module);
     Destroy(module);

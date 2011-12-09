@@ -7,10 +7,12 @@ public class Mission {
 
   private List<Team> teams = new List<Team>();
 
-  private GameObject playerPrefab;
+  private GameObject cursor;
 
-  public Mission(GameObject playerPrefab) {
-    this.playerPrefab = playerPrefab;
+  public Mission(GameObject c) {
+
+    cursor = c;
+
   }
 
   public void AddTeam(GameObject prefab, int shipCount) {
@@ -36,7 +38,23 @@ public class Mission {
     }
 
     if (makePlayer) {
-      makeShip(playerPrefab, combatTeam, allies, enemies);
+      //makeShip(playerPrefab, combatTeam, allies, enemies);
+
+      // Make cursor
+      MonoBehaviour.Instantiate(cursor, new Vector3(0, 0, 0), Quaternion.identity);
+      // Reset player for start of combat.
+      GameObject player = GameObject.FindGameObjectWithTag("ShipBlueprint");
+      player.transform.position = new Vector3(Random.Range(-Dist, Dist), 0, Random.Range(-Dist, Dist));
+      player.transform.rotation = new Quaternion(0, 0, 0, 0);
+      player.GetComponent<TeamMarker>().Team = combatTeam;
+      player.GetComponent<TargetMarker>().AlliedTargets = allies;
+      player.GetComponent<TargetMarker>().EnemyTargets = enemies;
+
+      PlayerActivation activater = player.GetComponent<PlayerActivation>();
+      activater.SetBehavioursEnabled(true);
+      activater.Recreate();
+      activater.Show();
+
     }
   }
 

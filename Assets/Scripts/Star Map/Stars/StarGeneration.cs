@@ -10,6 +10,7 @@ public class StarGeneration : MonoBehaviour {
   public int StarCount = 10;
   public GameObject StarPrefab;
   public GameObject PlayerPrefab;
+  public GameObject CursorPrefab;
   public Vector2 TopLeft;
   public Vector2 TopRight;
   public Vector2 BottomLeft;
@@ -91,7 +92,7 @@ public class StarGeneration : MonoBehaviour {
       marker.transform.parent = star.transform;
 
       if (i == which) {
-        Mission mission = new Mission(CombatPlayerPrefab);
+        Mission mission = new Mission(CursorPrefab);
         foreach (GameObject prefab in CombatTeamPrefabs) {
           mission.AddTeam(prefab, Random.Range(15, 20));
         }

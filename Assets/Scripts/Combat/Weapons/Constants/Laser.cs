@@ -57,7 +57,7 @@ public class Laser : ConstantWeapon {
 
     foreach (RaycastHit collision in collisions) {
       GameObject collider = collision.collider.gameObject;
-      if (Targeting.IsTargeting(collider)) {
+      if (targeting.IsTargeting(collider)) {
         // A target has been hit. Don't let the line pass through the target.
         collided = true;
         line.SetPosition(1, collision.point);

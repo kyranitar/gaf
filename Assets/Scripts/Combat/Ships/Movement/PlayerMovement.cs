@@ -22,4 +22,3 @@ public class PlayerMovement : ShipMovement {
     camera.position = new Vector3(transform.position.x, camera.position.y, transform.position.z);
   }
 }
-

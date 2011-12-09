@@ -19,7 +19,7 @@ public class RapidFire : Ability {
   public void Update() {
     if (shipWeaponHandle == null) {
       ShipWeapons weaponSys = Ship.GetComponent<ShipWeapons>();
-      shipWeaponHandle = weaponSys.Weapons[weaponSys.CurrentWeapon];
+      shipWeaponHandle = weaponSys.weapons[weaponSys.CurrentWeapon];
     }
     updateSkill();
   }

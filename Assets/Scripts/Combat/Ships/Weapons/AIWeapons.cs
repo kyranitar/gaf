@@ -9,7 +9,6 @@ public class AIWeapons : ShipWeapons {
   public float shootAngle = 20;
 
   public void Update() {
-
     // TODO - dynamically select weapon types.
     if (Target == null) {
       return;
@@ -17,10 +16,10 @@ public class AIWeapons : ShipWeapons {
 
     // HACKED
     float dist = Vector3.Distance(Target.transform.position, transform.position);
-    if (CurrentWeapon != 0 && dist < missilesDistance && Weapons.Length > 0) {
+    if (CurrentWeapon != 0 && dist < missilesDistance && weapons.Count > 0) {
       CurrentWeapon = 0; // turret
       shootChance += missilesChanceDecrease;
-    } else if (CurrentWeapon != 1 && dist > missilesDistance && Weapons.Length > 1) {
+    } else if (CurrentWeapon != 1 && dist > missilesDistance && weapons.Count > 1) {
       CurrentWeapon = 1; // missiles
       shootChance -= missilesChanceDecrease;
     }
@@ -32,11 +31,8 @@ public class AIWeapons : ShipWeapons {
       float offset = 0;
       if (angleBetween > 0 - shootAngle * 0.5 + offset && angleBetween < shootAngle * 0.5 + offset) {
         Fire();
-      } else {
       }
-
     }
-
   }
 
   private bool shouldFire() {

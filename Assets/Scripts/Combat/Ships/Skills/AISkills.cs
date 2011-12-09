@@ -25,7 +25,13 @@ public class AISkills : SkillSet {
   private int indexSB;
 
   public void Start() {
-    base.RecreateSkills();
+
+    for (int i = 0; i < Skills.Count; i++) {
+      GameObject skill = Instantiate(Skills[i], transform.position, transform.rotation) as GameObject;
+      Ability abilityBase = skill.GetComponent<Ability>();
+      abilityBase.Ship = gameObject;
+      Skills[i] = skill;
+    }
 
     indexRF = -1;
     indexSB = -1;
@@ -73,6 +79,13 @@ public class AISkills : SkillSet {
       return true;
     } else {
       return false;
+    }
+  }
+
+  /// Makes sure that all the skills are destroyed if the AI is killed.
+  public void OnDestroy() {
+    foreach (GameObject skill in Skills) {
+      Destroy(skill);
     }
   }
 }

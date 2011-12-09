@@ -1,44 +1,34 @@
 using UnityEngine;
-using System.Collections;
 
 public class PlayerActivation : MonoBehaviour {
 
-  /* Keeps a reference to all the factories we have */
-  private ModuleFactory[] factories;
-
-  private bool isActive;
-  public bool IsActive {
-    get {
-      return isActive;
-    }
+  public void Recreate() {
+    GetComponent<PlayerSkills>().Recreate();
+    GetComponent<PlayerWeapons>().Recreate();
   }
 
-  public void Start() {
-    factories = GetComponents<ModuleFactory>();
-  }
-
-  public void TurnOn() {
+  public void Show() {
     gameObject.renderer.enabled = true;
-    //gameObject.active = true;
-    Debug.Log("factories: " + factories.Length);
-    foreach(ModuleFactory module in factories) {
-      foreach (MonoBehaviour script in module.GetComponents<MonoBehaviour>()) {
-        Debug.Log("found a " + script.name + " in player");
-        script.enabled = true;
-
-      }
-    }
-    isActive = true;
   }
 
-  public void TurnOff() {
+  public void Hide() {
     gameObject.renderer.enabled = false;
-    //gameObject.active = false;
-    foreach(ModuleFactory module in factories) {
-      foreach (MonoBehaviour script in module.GetComponents<MonoBehaviour>()) {
-        script.enabled = false;
+  }
+
+  public void SetBehavioursEnabled(bool enabled) {
+    foreach (MonoBehaviour com in GetComponents<MonoBehaviour>()) {
+      if (com != this && !(com is ModuleFactory)) {
+        com.enabled = enabled;
       }
     }
-    isActive = false;
+    GetComponent<PlayerSkills>().Enabled = enabled;
+    GetComponent<PlayerWeapons>().Enabled = enabled;
   }
+
+  public void SetFactoriesEnabled(bool enabled) {
+    foreach (ModuleFactory com in GetComponents<ModuleFactory>()) {
+      com.enabled = enabled;
+    }
+  }
+
 }

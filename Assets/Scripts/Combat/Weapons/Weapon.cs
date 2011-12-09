@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour {
 
   /// The type of ships to cause damage to.
-  public TeamTarget Targeting;
+  public TeamTarget targeting;
 
   /// Cause the weapon to fire.
   public abstract void Fire();
