@@ -10,7 +10,7 @@ public class FacebookManager : MonoBehaviour {
   }
 
   public void SetFacebookUserID(string fbid) {
-    FacebookController.FacebookId = fbid;
+    FacebookController.FacebookID = uint.Parse(fbid);
   }
 
 }
