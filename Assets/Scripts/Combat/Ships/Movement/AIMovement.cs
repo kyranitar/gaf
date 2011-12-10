@@ -3,7 +3,6 @@ using System.Collections;
 
 public class AIMovement : ShipMovement {
 
-
   public bool debugActions;
   public bool doISeekAllies;
 
@@ -32,8 +31,8 @@ public class AIMovement : ShipMovement {
   private float aiTimer;
   private bool aiLocked;
 
-  private AISkills skillsRef;
-  private AIWeapons weaponsRef;
+  private SkillSet skillsRef;
+  private ShipWeapons weaponsRef;
 
   public void Start() {
     
@@ -47,8 +46,8 @@ public class AIMovement : ShipMovement {
     
     searchTarget = new GameObject("searchTarget");
 
-    skillsRef = gameObject.GetComponent<AISkills>();
-    weaponsRef = gameObject.GetComponent<AIWeapons>();
+    skillsRef = gameObject.GetComponent<SkillSet>();
+    weaponsRef = gameObject.GetComponent<ShipWeapons>();
 
     if(skillsRef == null) {
       Debug.Log("FAIL");

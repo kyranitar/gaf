@@ -2,7 +2,6 @@
 
 public class AIWeapons : ShipWeapons {
 
-  public Transform Target;
   public float shootChance;
   public float missilesDistance;
   public float missilesChanceDecrease;

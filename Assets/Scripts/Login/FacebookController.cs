@@ -11,7 +11,7 @@ public class FacebookController : MonoBehaviour {
   // The key is the facebook id, value is his score.
   void Start() {
     scores = new Dictionary<string, int>();
-    StartCoroutine(retrieveHighscores());
+//    StartCoroutine(retrieveHighscores());
   }
 
   void OnGUI() {

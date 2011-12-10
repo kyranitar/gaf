@@ -8,11 +8,8 @@ public class PlayerWeapons : ShipWeapons {
     }
     set {
       this.enabled = value;
-      Debug.Log("A");
       foreach(GameObject weapon in weapons) {
-        Debug.Log("b");
         foreach(MonoBehaviour component in weapon.GetComponents<MonoBehaviour>()) {
-          Debug.Log("enabled weapon");
           component.enabled = value;
         }
       }

@@ -15,6 +15,9 @@ using System.Collections.Generic;
 /// Handles the skills contained on a ship (player or AI).
 public class SkillSet : MonoBehaviour {
 
+  /// A refence to this NPC is targeting.
+  public Transform Target;
+
   /// Holds the various skills.
   public List<GameObject> Skills = new List<GameObject>();
 

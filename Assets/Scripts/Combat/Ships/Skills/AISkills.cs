@@ -10,9 +10,6 @@ using System.Collections;
 /// AI Prototype for NPC's using skills.
 public class AISkills : SkillSet {
 
-  /// A refence to this NPC is targeting.
-  public Transform Target;
-
   /// How likely this AI is to use the ability (lower values make the AI appear to be more timid,
   /// while higher values appear aggresive).
   public float Likelyness;

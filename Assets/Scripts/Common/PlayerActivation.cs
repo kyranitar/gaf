@@ -16,7 +16,6 @@ public class PlayerActivation : MonoBehaviour {
   }
 
   public void SetBehavioursEnabled(bool enabled) {
-
     foreach (MonoBehaviour com in GetComponents<MonoBehaviour>()) {
       if (com != this && !(com is ModuleFactory)) {
         com.enabled = enabled;

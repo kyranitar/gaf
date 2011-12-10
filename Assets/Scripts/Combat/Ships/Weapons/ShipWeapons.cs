@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// Author: Timothy Jones, Richard Roberts, and Cameron Owen.
 public abstract class ShipWeapons : MonoBehaviour {
 
+  // TODO KILL ME
+  public Transform Target;
+
   /// The weapons available to this weapon system.
   /// Note that every WeaponSystem MUST have at least one weapon.
   public List<GameObject> weapons;
