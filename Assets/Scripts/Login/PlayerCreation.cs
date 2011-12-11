@@ -14,7 +14,6 @@ public class PlayerCreation : MonoBehaviour {
 
 	public void Start() {
     ShipPrefab = Instantiate(ShipPrefab) as GameObject;
-    ShipPrefab.renderer.enabled = false;
     DontDestroyOnLoad(ShipPrefab);
 
     PlayerActivation activater = ShipPrefab.GetComponent<PlayerActivation>();

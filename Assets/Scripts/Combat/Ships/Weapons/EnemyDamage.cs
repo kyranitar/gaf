@@ -12,6 +12,9 @@ public class EnemyDamage : ShipDamage {
   protected override void OnDeath() {
     damages.Remove(this);
     if (damages.Count == 0) {
+	  PlayerActivation playerActivation = GameObject.FindGameObjectWithTag("ShipBlueprint").GetComponent<PlayerActivation>();
+	  playerActivation.Hide();
+	  playerActivation.SetBehavioursEnabled(false);
       ExperienceManager.AddExperience(20);
       Application.LoadLevel("Star Map");
     }

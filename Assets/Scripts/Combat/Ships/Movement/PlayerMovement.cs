@@ -20,6 +20,11 @@ public class PlayerMovement : ShipMovement {
 
     // Make the camera follow player.
     if (Application.loadedLevelName == "Combat") {
+      
+	  // Temporary -- camera can be null because we don't re-instantiate the player every time we load combat.		
+	  if (camera == null) {
+		camera = Camera.mainCamera.gameObject.transform;
+	  }
       camera.position = new Vector3(transform.position.x, camera.position.y, transform.position.z);
     }
   }

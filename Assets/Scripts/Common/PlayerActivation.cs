@@ -8,11 +8,15 @@ public class PlayerActivation : MonoBehaviour {
   }
 
   public void Show() {
-    gameObject.renderer.enabled = true;
+   	for(int i = 0; i < transform.childCount; i++) {
+	  transform.GetChild(i).renderer.enabled = true;
+	}
   }
 
   public void Hide() {
-    gameObject.renderer.enabled = false;
+	for(int i = 0; i < transform.childCount; i++) {
+	  transform.GetChild(i).renderer.enabled = false;
+	}
   }
 
   public void SetBehavioursEnabled(bool enabled) {

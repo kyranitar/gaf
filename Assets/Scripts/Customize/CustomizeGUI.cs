@@ -10,7 +10,7 @@ public class CustomizeGUI : MonoBehaviour
 
   private int selectedUI;
 
-  private const int boxSpacing = 10;
+  private const int boxSpacing = 50;
   private const float boxScreenWidth = 0.25f;
 
   private Rect customiseRect;
@@ -131,7 +131,7 @@ public class CustomizeGUI : MonoBehaviour
       int bLeft = buttonLeftOffset + (int)customiseRect.x + boxSpacing * ((i % buttonsPerRow) + 1) + buttonSize * (i % buttonsPerRow);
       int bTop = yOffset;
       
-      rectArray[i] = new Rect (bLeft, bTop, buttonSize, buttonSize);
+      rectArray[i] = new Rect (bLeft, bTop, buttonSize * 2.0f, buttonSize);
     }
   }
 

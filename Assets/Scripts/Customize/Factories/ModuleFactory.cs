@@ -35,9 +35,8 @@ public class ModuleFactory : MonoBehaviour
     if (i >= Prefabs.Length) {
       return;
     }
-    
     GameObject module = Instantiate (Prefabs[i], transform.position + Positions[modules.Count], transform.rotation) as GameObject;
-    module.transform.parent = this.transform;
+    //module.transform.parent = this.transform;
     modules.Add (module);
     
     // Turn all of this new modules (prefabs) components off, to avoid things like shooting or skills activating in the menu scenes.
