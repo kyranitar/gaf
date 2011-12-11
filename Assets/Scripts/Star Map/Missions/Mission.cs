@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 public class Mission {
 
@@ -7,12 +8,15 @@ public class Mission {
 
   private List<Team> teams = new List<Team>();
 
+  public ReadOnlyCollection<Team> Teams {
+    get {
+      return new ReadOnlyCollection<Team>(teams);
+    }
+  }
+
   private GameObject cursor;
-
   public Mission(GameObject c) {
-
     cursor = c;
-
   }
 
   public void AddTeam(GameObject prefab, int shipCount) {
@@ -69,7 +73,7 @@ public class Mission {
   }
 
   /// Just a storage class for the data on a team.
-  private class Team {
+  public class Team {
 
     public GameObject Prefab;
     public int ShipCount;

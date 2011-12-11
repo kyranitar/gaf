@@ -12,6 +12,15 @@ public class StarMarker : UtilBehaviour {
   public Mission Mission;
   private bool ascending = false;
 
+  private string label;
+  public string Label {
+    get {
+      return label;
+    }
+  }
+
+  private StarMapUI interfaceRef;
+
   public bool IsDestination {
     set {
       if (value == false) {
@@ -33,7 +42,10 @@ public class StarMarker : UtilBehaviour {
   }
 
   public void Start() {
+
     this.transform.Rotate(0, Random.Range(0, 360), 0);
+    label = "";
+    interfaceRef = Camera.main.GetComponent<StarMapUI>();
   }
 
   public void Update() {
@@ -49,6 +61,13 @@ public class StarMarker : UtilBehaviour {
       }
 
       mat.color = new Color(c.r, c.g, c.b + PulseRate * Time.deltaTime * (ascending ? 1 : -1));
+
+      GameObject player = GameObject.FindGameObjectWithTag("Player");
+      if (ThisY(player.transform.position) == this.transform.position) {
+        Debug.Log("wacked");
+        interfaceRef.SelectedStarPos = transform.position;
+        interfaceRef.SelectedMission = Mission;
+      }
     }
   }
 
@@ -59,13 +78,21 @@ public class StarMarker : UtilBehaviour {
     
     if (Mission != null && ThisY(player.transform.position) == this.transform.position) {
       // Prevent the tester from firing.
-//      MissionGeneration.isActive = false;
+      //MissionGeneration.isActive = false;
       Application.LoadLevel("Combat");
-//      Mission.BuildMission();
+      //Mission.BuildMission();
     } else if (this != currentDestination) {
       Player pScript = player.GetComponent<Player>();
       pScript.Stop();
     }
   }
 
+  public void OnMouseEnter() {
+    interfaceRef.HoveredMission = Mission;
+    interfaceRef.ActiveStarPos = transform.position;
+  }
+
+  public void OnMouseExit() {
+    interfaceRef.HoveredMission = null;
+  }
 }
