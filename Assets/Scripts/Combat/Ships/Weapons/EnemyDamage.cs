@@ -10,15 +10,12 @@ public class EnemyDamage : ShipDamage {
   }
 
   protected override void OnDeath() {
-    Destroy(this);
-  }
-
-  public void OnDestroy() {
     damages.Remove(this);
     if (damages.Count == 0) {
       ExperienceManager.AddExperience(20);
       Application.LoadLevel("Star Map");
     }
+    
+    Destroy(gameObject);
   }
-
 }

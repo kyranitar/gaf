@@ -19,6 +19,8 @@ public class PlayerMovement : ShipMovement {
     // The remaining changes are handled by the PlayerControls component.
 
     // Make the camera follow player.
-    camera.position = new Vector3(transform.position.x, camera.position.y, transform.position.z);
+    if (Application.loadedLevelName == "Combat") {
+      camera.position = new Vector3(transform.position.x, camera.position.y, transform.position.z);
+    }
   }
 }
