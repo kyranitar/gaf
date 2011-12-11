@@ -42,8 +42,6 @@ public class ShipDamage : MonoBehaviour {
       if (debris != null) {
         debris.CreateDebris();
       }
-      
-      Destroy(gameObject);
 
       OnDeath();
     }
