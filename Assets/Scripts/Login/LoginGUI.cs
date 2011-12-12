@@ -28,8 +28,6 @@ public class LoginGUI : MonoBehaviour {
   private Rect usernameRect;
   private Rect profilePictureRect;
 
-  private Vector3 ShipLocation;
-
   private int gsState = 0;
 
   public Texture FBTexture;
@@ -49,7 +47,6 @@ public class LoginGUI : MonoBehaviour {
 
     MenuPos = new Rect(20, 20, 68, 68);
     LeaderBoardsPos = new Rect(halfRes.x + 200, halfRes.y, 300, 50);
-    ShipLocation = new Vector3(0, 0, 0);
 
     gamerTagRect = new Rect(MenuPos);
     gamerTagRect.x += MenuPos.width + spacing;

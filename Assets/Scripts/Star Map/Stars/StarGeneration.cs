@@ -94,7 +94,7 @@ public class StarGeneration : MonoBehaviour {
       if (i == which) {
         Mission mission = new Mission(CursorPrefab);
         foreach (GameObject prefab in CombatTeamPrefabs) {
-          mission.AddTeam(prefab, Random.Range(15, 20));
+          mission.AddTeam(prefab, Random.Range(15, 20), new Vector3(Random.Range(-1, 1) * 100, 0, Random.Range(-1, 1) * 100));
         }
 
         marker.GetComponent<StarMarker>().Mission = mission;

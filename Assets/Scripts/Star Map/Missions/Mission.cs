@@ -19,8 +19,8 @@ public class Mission {
     cursor = c;
   }
 
-  public void AddTeam(GameObject prefab, int shipCount) {
-    teams.Add(new Team(prefab, shipCount));
+  public void AddTeam(GameObject prefab, int shipCount, Vector3 pos) {
+    teams.Add(new Team(prefab, shipCount, pos));
   }
 
   public void BuildMission() {
@@ -77,10 +77,12 @@ public class Mission {
 
     public GameObject Prefab;
     public int ShipCount;
+    public Vector3 Pos;
 
-    public Team(GameObject prefab, int shipCount) {
+    public Team(GameObject prefab, int shipCount, Vector3 pos) {
       this.Prefab = prefab;
       this.ShipCount = shipCount;
+      this.Pos = pos;
     }
 
   }
