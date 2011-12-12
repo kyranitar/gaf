@@ -16,8 +16,9 @@ public class MissionGeneration : MonoBehaviour {
   public void Start() {
     
     Mission mission = new Mission(CursorPrefab);
-    mission.AddTeam(TeamPrefabs[0], CountA, new Vector3(100, 0, 100));
-    mission.AddTeam(TeamPrefabs[1], CountB, new Vector3(-100, 0, -100));
+    Debug.Log("this one");
+    mission.AddTeam(TeamPrefabs[0], CountA, new Vector3(200, 0, 200));
+    mission.AddTeam(TeamPrefabs[1], CountB, new Vector3(-200, 0, -200));
     
     mission.BuildMission();
   }

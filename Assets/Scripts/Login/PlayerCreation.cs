@@ -7,14 +7,9 @@ public class PlayerCreation : MonoBehaviour {
   public GameObject ShipPrefab;
 
   public GameObject StartingWeapon;
-  public Vector3 WeaponPos;
-
   public GameObject StartingSkill;
-  public Vector3 SkillPos;
-
   public GameObject StartingControls;
-  public Vector3 ControlPos;
-
+  
   private bool needsBuild = true;
   /*
    * TODO for version 3
@@ -49,11 +44,11 @@ public class PlayerCreation : MonoBehaviour {
     // TODO get this from database, or if no databae entry start with basic.
     foreach (ModuleFactory mf in ShipPrefab.GetComponents<ModuleFactory>()) {
       if (mf.FactoryType == "Weapon") {
-        mf.AddModuleByObject(StartingWeapon, WeaponPos);
+        mf.AddModuleByObject(StartingWeapon);
       } else if (mf.FactoryType == "Skill") {
-        mf.AddModuleByObject(StartingSkill, SkillPos);
+        mf.AddModuleByObject(StartingSkill);
       } else if (mf.FactoryType == "Control") {
-        mf.AddModuleByObject(StartingControls, ControlPos);
+        mf.AddModuleByObject(StartingControls);
       }
     }
   }

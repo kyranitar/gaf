@@ -18,9 +18,6 @@ public class CustomizeGUI : MonoBehaviour {
   private Rect[] controlsButtons;
 
   private string[] toolbarStrings = new string[3] { "Weapons", "Skills", "Controls" };
-  private string[] weaponNames;
-  private string[] skillNames;
-  private string[] controlsNames;
 
   // Number of Available weapons -- get from Factory
   private int numWeapons;
@@ -44,13 +41,11 @@ public class CustomizeGUI : MonoBehaviour {
   // Number of buttons per row in the button grid
   private int buttonsPerRow;
 
-  private List<int> equippedWeapons = new List<int>();
-  private List<int> equippedSkills = new List<int>();
-  private List<int> equippedControls = new List<int>();
-
   private ModuleFactory weaponFactory;
   private ModuleFactory skillFactory;
-  private ModuleFactory controlsFactory;
+  private ModuleFactory controlFactory;
+
+  private string message = "Weclome to the Customize Menu.\nHere you can toggle different weapons, skills,\nand control schemes on and off.";
 
   public void Start() {
     // Show ship and enable factories
@@ -67,28 +62,14 @@ public class CustomizeGUI : MonoBehaviour {
       } else if (mf.FactoryType == "Skill") {
         skillFactory = mf;
       } else if (mf.FactoryType == "Control") {
-        controlsFactory = mf;
+        controlFactory = mf;
       }
     }
     
     // Set Factory-dependent variables
-    numWeapons = weaponFactory.Prefabs.Length;
-    numSkills = skillFactory.Prefabs.Length;
-    numControls = controlsFactory.Prefabs.Length;
-    
-    weaponNames = new string[numWeapons];
-    skillNames = new string[numSkills];
-    controlsNames = new string[numControls];
-    
-    for (int i = 0; i < weaponNames.Length; i++) {
-      weaponNames[i] = weaponFactory.Prefabs[i].name;
-    }
-    for (int i = 0; i < skillNames.Length; i++) {
-      skillNames[i] = skillFactory.Prefabs[i].name;
-    }
-    for (int i = 0; i < controlsNames.Length; i++) {
-      controlsNames[i] = controlsFactory.Prefabs[i].name;
-    }
+    numWeapons = weaponFactory.Prefabs.Count;
+    numSkills = skillFactory.Prefabs.Count;
+    numControls = controlFactory.Prefabs.Count;
     
     // TODO update this stuff to version 3.0
     
@@ -136,30 +117,46 @@ public class CustomizeGUI : MonoBehaviour {
 
   public void OnGUI() {
 
+    GUI.Box(new Rect(Screen.width * 0.5f, Screen.height * 0.5f, 400, 200), "");
+    GUI.Label(new Rect(Screen.width * 0.5f + 10, Screen.height * 0.5f + 10, 380, 180), message);
+
     // Update the toolbar.
     selectedUI = GUI.Toolbar(new Rect(boxSpacing, boxSpacing, customiseRect.width, boxSpacing * 2), selectedUI, toolbarStrings);
     GUI.Box(customiseRect, "");
+    int i = 0;
     
     if (selectedUI == 0) {
-      for (int i = 0; i < weaponButtons.Length; i++) {
-        if (GUI.Button(weaponButtons[i], weaponNames[i]))
-          ToggleWeapon(i);
+      foreach (GameObject prefab in weaponFactory.Prefabs) {
+        Texture buttonGrahpic = (IsMade(weaponFactory, prefab) ? weaponFactory.OnImages[i] : weaponFactory.OffImages[i]);
+        if (GUI.Button(weaponButtons[i++], buttonGrahpic)) {
+          ToggleWeapon(prefab);
+        }
       }
     } else if (selectedUI == 1) {
-      for (int i = 0; i < skillButtons.Length; i++) {
-        if (GUI.Button(skillButtons[i], skillNames[i]))
-          ToggleSkill(i);
+      foreach (GameObject prefab in skillFactory.Prefabs) {
+        Texture buttonGrahpic = (IsMade(skillFactory, prefab) ? skillFactory.OnImages[i] : skillFactory.OffImages[i]);
+        if (GUI.Button(skillButtons[i++], buttonGrahpic)) {
+          ToggleSkill(prefab);
+        }
       }
     } else if (selectedUI == 2) {
-      for (int i = 0; i < controlsButtons.Length; i++) {
-        if (GUI.Button(controlsButtons[i], controlsNames[i]))
-          ToggleControls(i);
+      foreach (GameObject prefab in controlFactory.Prefabs) {
+        Texture buttonGrahpic = (IsMade(controlFactory, prefab) ? controlFactory.OnImages[i] : skillFactory.OffImages[i]);
+        if (GUI.Button(controlsButtons[i++], buttonGrahpic)) {
+          ToggleControls(prefab);
+        }
       }
     }
     
     Rect backButtonRect = new Rect(boxSpacing, customiseRect.height - boxSpacing, customiseRect.width, boxSpacing * 2);
     
     if (GUI.Button(backButtonRect, "Back")) {
+
+      if (weaponFactory.Modules.Count <= 0 || skillFactory.Modules.Count <= 0 || controlFactory.Modules.Count <= 0) {
+        message = "You must always have atleast one weapon, one skill,\nand control scheme on your ship. Please choose these\nbefore leaving this menu.";
+        return;
+      }
+
       GameObject shipPrefab = GameObject.FindGameObjectWithTag("ShipBlueprint");
       PlayerActivation activater = shipPrefab.GetComponent<PlayerActivation>();
       activater.Hide();
@@ -168,70 +165,74 @@ public class CustomizeGUI : MonoBehaviour {
     }
   }
 
-  private void ToggleWeapon(int i) {
-    if (equippedWeapons.Contains(i)) {
-      //TODO change icon rather than string
-      weaponNames[i] = ToggleString(weaponNames[i]);
-      equippedWeapons.Remove(i);
-      
-      weaponFactory.RemoveModuleByName(weaponNames[i]);
-      return;
-    }
-    if (equippedWeapons.Count >= maxWeapons)
-      ToggleWeapon(equippedWeapons[0]);
-    
-    equippedWeapons.Add(i);
-    weaponNames[i] = ToggleString(weaponNames[i]);
-    
-    weaponFactory.AddModule(i);
-  }
+  private void ToggleWeapon(GameObject prefab) {
 
-  private void ToggleSkill(int i) {
-    if (equippedSkills.Contains(i)) {
-      //TODO change icon rather than string
-      skillNames[i] = ToggleString(skillNames[i]);
-      equippedSkills.Remove(i);
-      
-      skillFactory.RemoveModuleByName(skillNames[i]);
-      return;
-    }
-    if (equippedSkills.Count >= maxSkills)
-      ToggleSkill(equippedSkills[0]);
-    
-    equippedSkills.Add(i);
-    skillNames[i] = ToggleString(skillNames[i]);
-    
-    skillFactory.AddModule(i);
-  }
-
-  private void ToggleControls(int i) {
-    if (equippedControls.Contains(i)) {
-      //TODO change icon rather than string
-      controlsNames[i] = ToggleString(controlsNames[i]);
-      equippedControls.Remove(i);
-      
-      controlsFactory.RemoveModuleByName(controlsNames[i]);
-      return;
-    }
-    if (equippedControls.Count >= maxControls)
-      ToggleControls(equippedControls[0]);
-    
-    equippedControls.Add(i);
-    controlsNames[i] = ToggleString(controlsNames[i]);
-    
-    controlsFactory.AddModule(i);
-  }
-
-  private void RemoveByName(List<GameObject> objects, string name) {
-    for (int i = 0; i < objects.Count; i++) {
-      if (objects[i].name.Contains(name)) {
-        objects.RemoveAt(i);
+    // Check if the factory has already instaited this prefab, if so remove it.
+    for (int i = 0; i < weaponFactory.Modules.Count; i++) {
+      if (weaponFactory.Modules[i].name == prefab.name) {
+        weaponFactory.RemoveModule(i);
         return;
       }
     }
+
+    // Check for max, and return if so.
+    if(weaponFactory.Modules.Count >= maxWeapons) {
+      message = "You have reached the maximum amount of weapons.\nPlease remove one first.";
+      return;
+    }
+
+    // If not found, then add it.
+    weaponFactory.AddModuleByObject(prefab);
   }
 
-  string ToggleString(string s) {
-    return s;
+  private void ToggleSkill(GameObject prefab) {
+
+    // Check if the factory has already instaited this prefab, if so remove it.
+    for (int i = 0; i < skillFactory.Modules.Count; i++) {
+      if (skillFactory.Modules[i].name == prefab.name) {
+        skillFactory.RemoveModule(i);
+        return;
+      }
+    }
+
+    // Check for max, and return if so.
+    if(skillFactory.Modules.Count >= maxSkills) {
+      message = "You have reached the maximum amount of skills.\nPlease remove one first.";
+      return;
+    }
+
+    // If not found, then add it.
+    skillFactory.AddModuleByObject(prefab);
+  }
+
+  private void ToggleControls(GameObject prefab) {
+
+    // Check if the factory has already instaited this prefab, if so remove it.
+    for (int i = 0; i < controlFactory.Modules.Count; i++) {
+      if (controlFactory.Modules[i].name == prefab.name) {
+        controlFactory.RemoveModule(i);
+        return;
+      }
+    }
+
+    // Check for max, and return if so.
+    if(controlFactory.Modules.Count >= maxControls) {
+      message = "You have reached the maximum amount of control schemes.\nPlease remove one first.";
+      return;
+    }
+
+    // If not found, then add it.
+    controlFactory.AddModuleByObject(prefab);
+
+  }
+
+  private bool IsMade(ModuleFactory factory, GameObject prefab) {
+    foreach(GameObject module in factory.Modules) {
+      if(module.name == prefab.name) {
+        return true;
+      }
+    }
+
+   return false;
   }
 }
