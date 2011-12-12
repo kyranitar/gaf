@@ -22,6 +22,10 @@ public class FriendDamage : ShipDamage {
   }
 
   protected override void OnDeath() {
+    Destroy(gameObject);
+  }
+
+  public void OnDestroy() {
     damages.Remove(this);
 
     if (following) {
@@ -29,8 +33,6 @@ public class FriendDamage : ShipDamage {
         combatComplete.Defeat();
       }
     }
-
-    Destroy(gameObject);
   }
 
   /// Causes the camera to follow a friend.

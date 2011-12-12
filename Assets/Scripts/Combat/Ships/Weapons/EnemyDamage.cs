@@ -12,12 +12,15 @@ public class EnemyDamage : ShipDamage {
   }
 
   protected override void OnDeath() {
+    Destroy(gameObject);
+  }
+
+  public void OnDestroy() {
     damages.Remove(this);
 
     if (damages.Count == 0) {
       combatComplete.Victory();
     }
-    
-    Destroy(gameObject);
   }
+  
 }

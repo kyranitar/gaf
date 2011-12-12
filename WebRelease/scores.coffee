@@ -21,9 +21,9 @@ app.get '/get', (req, res) ->
   id = req.query.id
   db.all get, id, error res, (rows) ->
     if rows.length is 0
-      res.end "ERROR: No such user."
+      res.end '0'
     else
-      res.end String rows[0].score
+      res.end rows[0].score.toString()
 
 app.get '/high', (req, res) ->
   db.all high, error res, (rows) ->
@@ -32,10 +32,9 @@ app.get '/high', (req, res) ->
     res.end rows.join '\n'
 
 app.post '/add', (req, res) ->
-  console.log "! here i am"
-  id = req.body.id
+  id = parseInt req.body.id, 10
   score = parseInt req.body.score, 10
-  if isNaN score
+  if isNaN id or isNaN score
     res.end "ERROR: Invalid score"
   else
     db.all get, id, error res, (rows) ->
@@ -49,10 +48,6 @@ app.post '/add', (req, res) ->
 app.get '/crossdomain.xml', (req, res) ->
   readFile 'crossdomain.xml', error res, (data) ->
     res.end data
-
-app.all '*', (req, res) ->
-  console.log 'invalid path: ' + req.path
-  res.end ''
 
 error = (res, f) -> (err, rows) ->
   if err then res.end "ERROR: #{err}" else f rows

@@ -1,30 +1,26 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 public class FacebookController : MonoBehaviour {
 
-  private static uint facebookID;
+  private static uint facebookID = 0;
   public static uint FacebookID {
     get {
       return facebookID;
     }
     set {
       facebookID = value;
+      ExperienceManager.id = value;
       profilePicture = profilePictureRequest(value);
       facebookData = facebookDataRequest(value);
     }
   }
 
-  private static string facebookUser;
-  public static string FacebookUser {
-    get {
-      return facebookUser;
-    }
+  public static string FacebookUsername {
     set {
-      facebookUser = value;
-      profilePicture = profilePictureRequest(value);
-      facebookData = facebookDataRequest(value);
+      GameObject obj = new GameObject();
+      MonoBehaviour beh = obj.AddComponent<MonoBehaviour>();
+      beh.StartCoroutine(facebookDataRequest(value));
     }
   }
 
@@ -40,11 +36,14 @@ public class FacebookController : MonoBehaviour {
     return new WWW("http://graph.facebook.com/" + id);
   }
 
-  private static WWW profilePictureRequest(string username) {
-    return new WWW("http://graph.facebook.com/" + username + "/picture");
+  private static IEnumerator<WWW> facebookDataRequest(string username) {
+    WWW req = new WWW("http://graph.facebook.com/" + username);
+    yield return req;
+    FacebookID = uint.Parse(new JSONObject(req.text).GetField("id").str);
   }
 
-  private static WWW facebookDataRequest(string username) {
-    return new WWW("http://graph.facebook.com/" + username);
+  private static WWW experienceRequest(uint id) {
+    return new WWW("http://zimothy.com/get?id=" + id);
   }
+
 }

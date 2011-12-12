@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 /* GUI handler for signing in and retrieving experience.
  *
@@ -28,11 +28,11 @@ public class LoginGUI : MonoBehaviour {
   private Rect usernameRect;
   private Rect profilePictureRect;
 
-  private int gsState = 0;
-
   public Texture FBTexture;
   public string FBName;
   public int CurrentExp;
+  private float timer = 0;
+  private ExperienceManager.Score[] highScores = null;
 
   void Start() {
 
@@ -58,19 +58,20 @@ public class LoginGUI : MonoBehaviour {
   }
 
   void OnGUI() {
+    WWW data = FacebookController.facebookData;
+    if (data != null && data.isDone) {
+      if (timer == 0) {
+        GetExperience();
+        GetLeaderBoards();
+      }
 
-    switch (gsState) {
+      if ((timer += Time.deltaTime) > 60) {
+        timer = 0;
+      }
 
-    case 0:
-      GSInsertUsername();
-      break;
-
-    case 1:
       GSMain();
-      break;
-
-    case 2:
-      break;
+    } else {
+      GSInsertUsername();
     }
   }
 
@@ -81,8 +82,8 @@ public class LoginGUI : MonoBehaviour {
     if (GUI.Button(ConfirmLoginPos, "Go")) {
       PlayerActivation activater = GameObject.FindGameObjectWithTag("ShipBlueprint").GetComponent<PlayerActivation>();
       activater.Show();
-      FacebookController.FacebookUser = stringToEdit;
-      gsState = 1;
+
+      FacebookController.FacebookUsername = stringToEdit;
     }
 
     GUI.Label(labelPos, "A facebook username should be entered.\nCreate one with Facebook, in your account settings.");
@@ -116,14 +117,28 @@ public class LoginGUI : MonoBehaviour {
 
 
     GUI.Box(new Rect(LeaderBoardsPos.x, LeaderBoardsPos.y, 200, 500), "Leader Boards");
+    if (highScores != null) {
+      float pos = LeaderBoardsPos.y + 20;
+      foreach (ExperienceManager.Score score in highScores) {
+        float x = LeaderBoardsPos.x;
+        GUI.DrawTexture(new Rect(x, pos, 50, 50), score.picture);
+        GUI.Label(new Rect(x + 60,  pos, 100, 50), score.username);
+        GUI.Label(new Rect(x + 170, pos, 30, 50), score.score.ToString());
+        pos += 50;
+      }
+    }
   }
 
   void GetLeaderBoards() {
-    // TODO generate leaderboards
+    ExperienceManager.GetHighScores(delegate (ExperienceManager.Score[] scores) {
+      highScores = scores;
+    });
   }
 
   void GetExperience() {
-    // TODO get the users exp from database
+    ExperienceManager.GetExperience(delegate (int exp) {
+      CurrentExp = exp;
+    });
   }
 
   void GetShipSpec() {
@@ -136,7 +151,7 @@ public class LoginGUI : MonoBehaviour {
 
     if (FacebookController.facebookData != null && FacebookController.facebookData.isDone) {
       JSONObject userData = new JSONObject(FacebookController.facebookData.text);
-      GUI.Label(usernameRect, "User name: " + userData.GetField("username").str + "\nExperience: " + 18);
+      GUI.Label(usernameRect, "User name: " + userData.GetField("username").str + "\nExperience: " + CurrentExp);
     } else {
       GUI.Label(usernameRect, "Loading...");
     }
