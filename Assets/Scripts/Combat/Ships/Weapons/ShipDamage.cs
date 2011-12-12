@@ -27,6 +27,12 @@ public class ShipDamage : MonoBehaviour {
     }
   }
 
+  protected CombatComplete combatComplete;
+
+  public virtual void Start() {
+    combatComplete = GameObject.FindGameObjectWithTag("Combat Complete").GetComponent<CombatComplete>();
+  }
+
   /// Modify the damage amount.
   /// Negative values remove damage, but will never fall below zero.
   /// If the modification causes the object to be destroyed, this will be carried out.
