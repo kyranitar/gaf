@@ -54,6 +54,7 @@ public class PlayerSkills : SkillSet {
     foreach (ModuleFactory module in GetComponents<ModuleFactory>()) {
       if (module.FactoryType == "Skill") {
         foreach (GameObject skill in module.Modules) {
+          if (skill == null) { Debug.LogError("Skill is null"); }
           AddSkill(skill);
         }
       }
@@ -90,7 +91,6 @@ public class PlayerSkills : SkillSet {
 
   /// Adds our skill, and handles the defensiveCount.
   public void AddSkill(GameObject skill) {
-    
     if (skill.GetComponent<Ability>().isOffensive) {
       offensiveCount++;
     }

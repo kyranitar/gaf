@@ -10,7 +10,6 @@ public abstract class Ability : MonoBehaviour {
 
   /// Name and GUI Image for skill.
   public string SkillName;
-  public Texture Image;
   public bool isOffensive;
 
   /// Handles for ship damage, movement, and weapons

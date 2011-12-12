@@ -14,16 +14,11 @@ public class MissionGeneration : MonoBehaviour {
   public static int CountB = 1;
 
   public void Start() {
-
+    
     Mission mission = new Mission(CursorPrefab);
-
-    /*foreach (GameObject prefab in TeamPrefabs) {
-      mission.AddTeam(prefab, TeamShipCount);
-    }*/
-
     mission.AddTeam(TeamPrefabs[0], CountA);
     mission.AddTeam(TeamPrefabs[1], CountB);
-
+    
     mission.BuildMission();
   }
   
