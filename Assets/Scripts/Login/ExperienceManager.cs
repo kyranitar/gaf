@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Text;
 
 public class ExperienceManager {
 
@@ -6,7 +7,9 @@ public class ExperienceManager {
   public static uint ID = 643387554;
 
   public static void AddExperience(uint amount) {
-    new WWW("http://" + domain + "/add?id=" + ID + "&amount=" + amount);
+    Encoding utf8 = new UTF8Encoding();
+    byte[] data = utf8.GetBytes("id=" + ID + "&amount=" + amount);
+    new WWW("http://" + domain + "/add", data);
   }
 
 }
