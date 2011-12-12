@@ -1,5 +1,7 @@
 {Database} = require 'sqlite3'
+{readFile} = require 'fs'
 db = new Database 'scores.db'
+
 
 # CREATE TABLE Scores (facebookID TEXT, score INTEGER);
 
@@ -30,6 +32,7 @@ app.get '/high', (req, res) ->
     res.end rows.join '\n'
 
 app.post '/add', (req, res) ->
+  console.log "! here i am"
   id = req.body.id
   score = parseInt req.body.score, 10
   if isNaN score
@@ -42,6 +45,14 @@ app.post '/add', (req, res) ->
       else add
       db.all which, score, id, error res, (err) ->
         res.end ""
+
+app.get '/crossdomain.xml', (req, res) ->
+  readFile 'crossdomain.xml', error res, (data) ->
+    res.end data
+
+app.all '*', (req, res) ->
+  console.log 'invalid path: ' + req.path
+  res.end ''
 
 error = (res, f) -> (err, rows) ->
   if err then res.end "ERROR: #{err}" else f rows

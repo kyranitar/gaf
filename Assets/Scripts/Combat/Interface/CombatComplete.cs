@@ -38,6 +38,7 @@ public class CombatComplete : MonoBehaviour {
         player.GetComponent<PlayerDamage>().ExitCombat();
       }
 
+      status = CombatStatus.Pending;
       Application.LoadLevel("Star Map");
     }
   }

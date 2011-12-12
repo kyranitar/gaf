@@ -3,13 +3,14 @@ using System.Text;
 
 public class ExperienceManager {
 
-  public static string domain = "localhost";
+  public static string domain = "zimothy.com:8001";
   public static uint id = 643387554;
 
   public static void ModifyExperience(int amount) {
-    Encoding utf8 = new UTF8Encoding();
-    byte[] data = utf8.GetBytes("id=" + id + "&amount=" + amount);
-    new WWW("http://" + domain + "/add", data);
+    WWWForm form = new WWWForm();
+    form.AddField("id", id.ToString());
+    form.AddField("score", amount);
+    new WWW("http://" + domain + "/add", form);
   }
 
 }
