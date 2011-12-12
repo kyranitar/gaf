@@ -79,12 +79,12 @@ public class LoginGUI : MonoBehaviour {
 
   void GSInsertUsername() {
     // TODO show splash screen.
-
     stringToEdit = GUI.TextField(LoginFieldPos, stringToEdit, 25);
 
     if (GUI.Button(ConfirmLoginPos, "Go")) {
       PlayerActivation activater = GameObject.FindGameObjectWithTag("ShipBlueprint").GetComponent<PlayerActivation>();
       activater.Show();
+      FacebookController.FacebookUser = stringToEdit;
       gsState = 1;
     }
 
